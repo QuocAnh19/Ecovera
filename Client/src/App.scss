@@ -1,0 +1,37 @@
+@use './Styles/_typography.scss' as *;
+@use './Styles/_variable.scss' as *;
+@use './Styles/_reset.scss' as *;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-main;
+}
+
+.app {
+  width: 100%;
+}
+
+.margin-auto{
+  max-width: 1520px;
+  margin: 0 auto;
+}
+
+input{
+  padding-inline-start: 24px;
+  font-size: $font-size-small;
+  font-weight: $font-weight-regular;
+  line-height: 150%;
+  color: $Grey-500;
+}
+p {
+  font-size: $font-size-tiny;
+  font-weight: $font-weight-regular;
+  line-height: 150%;
+  color: $Grey-400;
+}
+

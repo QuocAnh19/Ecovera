@@ -1,0 +1,136 @@
+@use "../../Styles/variable" as *;
+@use "../../Styles/typography" as *;
+
+.container {
+
+    .subscribeBackground {
+        background-color: #F7F7F7;
+
+        .subscribe {
+            display: flex;
+            align-items: center;
+            justify-items: center;
+            justify-content: space-between;
+            flex-direction: row;
+            height: 162px;
+            margin-left: 100px;
+            margin-right: 100px;
+
+
+            .content {
+                display: flex;
+                flex-direction: column;
+                width: 448px;
+                // margin-top: 40px;
+                // margin-bottom: 40px;
+                gap: 4px;
+
+                .title {
+                    font-size: $font-size-xl;
+                    font-weight: $font-weight-semibold;
+                    line-height: 150%;
+                    color: $Grey-900;
+                }
+
+            }
+
+            .emailSearch {
+                display: flex;
+                justify-content: space-between;
+                width: 492px;
+                height: 52px;
+                background-color: $White-color;
+                border: 1px solid $Grey-100;
+                border-radius: 46px;
+                gap: 4px;
+
+                input {
+                    flex: 1;
+                }
+
+            }
+
+            .iconSocial {
+                display: flex;
+                gap: 8px;
+            }
+        }
+    }
+
+
+
+    .footerBoxBackground {
+        background-color: $Grey-900;
+
+        .footerBox {
+            height: 348px;
+            margin-left: 100px;
+            margin-right: 100px;
+
+            .footer {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                padding-top: 60px;
+
+                .left {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                    width: 342px;
+
+                    .logo {
+                        display: flex;
+                        align-items: center;
+                        width: 32px;
+                        height: 32px;
+                        background-image: url('../../Assets/Icon/iconLogo.svg');
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        padding-left: 40px;
+
+                        h5 {
+                            color: $White-color;
+                        }
+                    }
+
+                    .cta {
+                        display: flex;
+                        flex-direction: row;
+                        gap: 16px;
+
+
+
+                        button {
+                            font-size: $font-size-tiny;
+                            font-weight: $font-weight-medium;
+                            color: $White-color;
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+                .right {
+                    display: flex;
+                    justify-content: space-around;
+                }
+            }
+
+            .copyRight {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                height: 80px;
+                margin-top: 60px;
+                border-top: 1px solid $Grey-200;
+
+                .copyRightImg {
+                    display: flex;
+                    gap: 8px;
+                }
+            }
+        }
+    }
+}

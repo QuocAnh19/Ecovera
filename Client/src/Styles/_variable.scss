@@ -1,0 +1,67 @@
+@use "sass:color";
+// Color
+$Soft-Primary-color: #84d187;
+$Primary-color: #00b207;
+$Hard-Primary-color: #2c742f;
+$Warning-color: #ff8a00;
+$Danger-color: #ea4b48;
+$White-color: #ffffff;
+
+$Grey-50: #f2f2f2;
+$Grey-100: #e6e6e6;
+$Grey-200: #cccccc;
+$Grey-300: #b3b3b3;
+$Grey-400: #999999;
+$Grey-500: #808080;
+$Grey-600: #666666;
+$Grey-700: #4d4d4d;
+$Grey-800: #333333;
+$Grey-900: #1a1a1a;
+
+$Green-grey-50: #edf2ee;
+$Green-grey-100: #dde6dd;
+$Green-grey-200: #bccdbb;
+$Green-grey-300: #9cb99c;
+$Green-grey-400: #7ba67b;
+$Green-grey-500: #5a835a;
+$Green-grey-600: #3a613a;
+$Green-grey-700: #1a401a;
+$Green-grey-800: #003300;
+$Green-grey-900: #001a00;
+
+$text-heading-color: #0a1931;
+
+$font-main: "Poppins", sans-serif;
+
+
+// Font weights
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Font sizes
+$font-size-tiny: 14px;
+$font-size-small: 16px;
+$font-size-medium: 18px;
+$font-size-large: 20px;
+$font-size-xl: 24px;
+$font-size-xxl: 24px;
+
+
+// Btn padding
+$btn-padding-small: 10px 24px;
+$btn-padding-medium: 14px 32px;
+$btn-padding-large: 16px 40px;
+
+// Btn radius
+$btn-radius: 43px;
+$btn-font-weight: 600;
+$btn-border: 1px solid $Primary-color;
+
+
+// Tag
+$tag-radius: 4px;
+$tag-padding: 3px 8px 3px 8px;
+

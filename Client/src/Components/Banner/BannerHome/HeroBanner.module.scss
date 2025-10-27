@@ -1,0 +1,16 @@
+.container{
+    // max-width: 1520px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 24px;
+    gap: 24px;
+}
+
+.bannerSmall{
+    display: flex;
+    flex-direction: column;
+    width: 423px;
+    height: 288px;
+    gap: 24px;
+}

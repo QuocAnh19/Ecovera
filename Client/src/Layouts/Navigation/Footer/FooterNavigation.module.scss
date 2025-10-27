@@ -1,0 +1,42 @@
+@use "../../../Styles/variable" as *;
+
+.container {
+    
+    .item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+
+        nav {
+            display: flex;
+            gap: 120px;
+
+            .ulFooter {
+                display: flex;
+                flex-direction: column;
+                list-style: none;
+                gap: 12px;
+
+                p {
+                    font-size: $font-size-small;
+                    font-weight: $font-weight-medium;
+                    color: $White-color;
+                    line-height: 150%;
+                    margin-bottom: 20px;
+                }
+
+                .liFooter {
+                    display: flex;
+                    font-size: $font-size-tiny;
+                    font-weight: $font-weight-regular;
+                    color: $Grey-400;
+                    
+
+                    &:hover{
+                        color: $White-color;
+                    }
+                }
+            }
+        }
+    }
+}

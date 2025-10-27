@@ -1,0 +1,10 @@
+export {default as Product_1} from './Product_1.png';
+export {default as Product_2} from './Product_2.png';
+export {default as Product_3} from './Product_3.png';
+export {default as Product_4} from './Product_4.png';
+export {default as Product_5} from './Product_5.png';
+export {default as Product_6} from './Product_6.png';
+export {default as Product_7} from './Product_7.png';
+export {default as Product_8} from './Product_8.png';
+export {default as Product_9} from './Product_9.png';
+export {default as Product_10} from './Product_10.png';

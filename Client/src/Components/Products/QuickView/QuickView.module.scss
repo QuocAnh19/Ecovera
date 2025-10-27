@@ -1,0 +1,106 @@
+@use "../../../Styles/variable" as *;
+@use "../../../Styles/typography" as *;
+
+.quickViewWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.quickViewContainer {
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
+    width: 1320px;
+    height: 636px;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid $Grey-200;
+    padding: 32px;
+    position: relative;
+    z-index: 1000;
+
+    .quickViewBox {
+        display: flex;
+        flex-direction: row;
+
+        .imageBox {
+            .img {
+                width: 556px;
+                height: 556px;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 568px;
+            margin-left: 24px;
+
+            .heading {
+                display: flex;
+                flex-direction: column;
+                gap: 40px;
+
+                .price {
+                    font-size: $font-size-xxl;
+                    font-weight: $font-weight-medium;
+                    color: $Primary-color;
+                }
+            }
+
+            .brand {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+
+                .brandBox {
+                    display: flex;
+                    justify-content: space-between;
+                    flex-direction: row;
+
+                    .left {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        gap: 10px;
+                    }
+
+                    .right {
+                        display: flex;
+                        flex-direction: row;
+                        gap: 10px;
+                        align-items: center;
+                    }
+                }
+            }
+
+            .CTA {
+                display: flex;
+                flex-direction: row;
+                gap: 12px;
+
+                .btnAdd {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    width: 368px;
+                }
+            }
+        }
+    }
+
+
+}

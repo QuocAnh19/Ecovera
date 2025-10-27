@@ -1,0 +1,43 @@
+@use "./_variable.scss" as *;
+@use "./reset.scss" as *;
+
+h1 {
+  font-family: $font-main;
+  font-size: 56px;
+  font-weight: $font-weight-regular;
+  line-height: 120%;
+  color: $text-heading-color;
+}
+
+h2 {
+  font-family: $font-main;
+  font-size: 48px;
+  font-weight: $font-weight-regular;
+  line-height: 120%;
+  color: $text-heading-color;
+}
+
+h3 {
+  font-family: $font-main;
+  font-size: 48px;
+  font-weight: $font-weight-regular;
+  line-height: 56%;
+  color: $text-heading-color;
+}
+
+h4 {
+  font-family: $font-main;
+  font-size: 40px;
+  font-weight: $font-weight-regular;
+  line-height: 48%;
+  color: $text-heading-color;
+}
+
+h5 {
+  font-family: $font-main;
+  font-size: 32px;
+  font-weight: $font-weight-regular;
+  line-height: 40%;
+  color: $text-heading-color;
+}
+

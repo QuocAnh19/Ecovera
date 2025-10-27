@@ -1,0 +1,12 @@
+.container {
+    margin: 100px 60px 0 100px;
+    
+    .banner {
+        display: flex;
+        flex-direction: row;
+        gap: 24px;
+        width: 424px;
+        height: 536px;
+        border-radius: 8px;
+    }
+}

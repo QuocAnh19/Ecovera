@@ -1,0 +1,100 @@
+@use '../../Styles/variable' as *;
+@use '../../Styles/typography' as *;
+@use '../../Styles/reset' as *;
+
+
+.wrapper {
+    border-radius: $btn-radius;
+    font-family: $font-main;
+    font-weight: $btn-font-weight;
+    cursor: pointer;
+
+    //Size Button
+    &.small {
+        padding: $btn-padding-small;
+        min-width: 102px;
+    }
+
+    &.medium {
+        padding: $btn-padding-medium;
+        min-width: 145px;
+    }
+
+    &.large {
+        padding: $btn-padding-large;
+        min-width: 152px;
+    }
+
+    &.circle{
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: $Grey-50;
+
+        &:hover{
+            background-color: $Primary-color;
+            path {
+                fill: $Primary-color;
+                stroke: $White-color;
+            }
+        }
+    }
+
+    // Footer
+    &.circleSocial{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        
+
+        &:hover{
+            background-color: $Primary-color;
+            color: $White-color;
+        }
+    }
+
+    //Type Button
+    &.fill {
+        background-color: $Primary-color;
+        color: $White-color;
+
+        &:hover{
+            background-color: $Hard-Primary-color;
+        }
+    }
+
+    &.fillCircle{
+        background-color: #F7F7F7;
+
+        &:hover{
+            background-color: $Primary-color;
+        }
+    }
+
+
+    &.border {
+        border: 2px solid $Primary-color;
+        background-color: $White-color;
+        color: $Primary-color;
+
+        &:hover {
+            border: 2px solid $Hard-Primary-color;
+            background-color: $White-color;
+            color: $Hard-Primary-color;
+        }
+    }
+
+    &.ghost {
+        background-color: rgba(86, 172, 89, 0.1);
+        color: $Primary-color;
+
+        &:hover {
+            background-color: rgba(44, 116, 47, 0.2);
+            color: $Hard-Primary-color;
+        }
+    }
+
+}

@@ -1,0 +1,52 @@
+@use "../../Styles/variable" as *;
+@use "../../Styles/typography" as *;
+
+
+.qualityContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 124px;
+    height: 50px;
+    border-radius: 40px;
+    border: 1px solid $Grey-100;
+    padding: 8px;
+
+    .inputQuality {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        font-size: $font-size-medium;
+        font-weight: $font-weight-medium;
+        color: $Grey-900;
+        appearance: textfield;
+    }
+
+    .inputQuality::-webkit-outer-spin-button,
+    .inputQuality::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .btnQuality {
+
+        width: 34px;
+        height: 34px;
+        background-color: $Grey-50;
+        font-size: $font-size-large;
+        font-weight: $font-weight-medium;
+        color: $Grey-900;
+        border-radius: 50%;
+
+        &:hover {
+            cursor: pointer;
+            background-color: $Grey-50;
+        }
+    }
+
+
+}

@@ -1,0 +1,36 @@
+@use '../../Styles/variable' as *;
+@use '../../Styles/typography' as *;
+@use '../../Styles/reset' as *;
+
+.wrapper{
+    display: inline-flex;
+    flex-direction: row;
+    gap: 8px;
+    height: auto;
+    border-radius: $tag-radius;
+    padding: $tag-padding;
+    // margin-top: 16px;
+    // margin-left: 16px;
+    font-size: $font-size-small;
+    font-weight: $font-weight-medium;
+    line-height: 150%;
+    color: $White-color;
+
+    // Type tag
+    &.tagSale{
+        background-color: $Danger-color;
+    }
+
+    &.tagNew{
+        background-color: $Warning-color;
+    }
+
+    &.tagBestSale{
+        background-color: #2388FF;
+    }
+
+    &.tagOutOfStock{
+        background-color: $Grey-900;
+    }
+
+}

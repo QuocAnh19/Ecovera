@@ -1,0 +1,109 @@
+@use "../../Styles/variable" as *;
+
+.productsContainer {
+    height: 714px;
+    margin-top: 60px;
+
+    .productsHeading {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-left: 100px;
+        margin-right: 100px;
+
+        .btn {
+            color: $Primary-color;
+            font-size: $font-size-small;
+            font-weight: $font-weight-medium;
+            display: flex;
+            gap: 12px;
+        }
+    }
+
+    .productsBox {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        padding-top: 32px;
+        margin-left: 100px;
+        margin-right: 100px;
+
+        .productsItem {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: 264px;
+            height: 327px;
+            border: 1px solid $Grey-100;
+            gap: 12px;
+
+            .img {
+                width: 254px;
+                height: 230px;
+                margin: 5px;
+            }
+
+            .tagContainer {
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+                position: absolute;
+                margin-top: 16px;
+                margin-left: 16px;
+            }
+
+            .content {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+                padding: 12px 12px 0 12px;
+
+
+                .left {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+
+                    .title {
+                        font-size: $font-size-tiny;
+                        font-weight: $font-weight-regular;
+                        color: $Grey-700;
+                    }
+
+                    .price {
+                        font-size: $font-size-small;
+                        font-weight: $font-weight-medium;
+                        color: $Grey-900;
+                    }
+                }
+
+                .right {}
+
+            }
+
+            &:hover {
+                cursor: pointer;
+                border-color: $Primary-color;
+                box-shadow: 1px 1px 8px $Primary-color;
+            }
+
+            &:hover .btnRight {
+                background-color: $Primary-color;
+
+                path {
+                    fill: $Primary-color;
+                    stroke: $White-color;
+                }
+            }
+
+
+
+
+
+        }
+
+
+    }
+
+
+}
