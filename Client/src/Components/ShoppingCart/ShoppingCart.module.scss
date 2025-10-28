@@ -1,0 +1,110 @@
+.shoppingCartContainer {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    h5 {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .cartTable {
+        width: 100%;
+        border-collapse: collapse;
+
+        .cartHeader {
+            display: grid;
+            grid-template-columns: 3fr 1fr 2fr 1fr 0.5fr;
+            font-weight: 600;
+            color: #888;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cartRow {
+            display: grid;
+            grid-template-columns: 3fr 1fr 2fr 1fr 0.5fr;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f1f1f1;
+
+            .product {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                img {
+                    width: 60px;
+                    height: 60px;
+                    object-fit: cover;
+                    border-radius: 8px;
+                }
+
+                span {
+                    font-size: 16px;
+                }
+            }
+
+            .price,
+            .subtotal {
+                font-size: 16px;
+                color: #333;
+            }
+
+            .quantity {
+                display: flex;
+                align-items: center;
+            }
+
+            .removeBtn {
+                background: none;
+                border: none;
+                font-size: 18px;
+                color: #888;
+                cursor: pointer;
+                transition: color 0.2s;
+
+                &:hover {
+                    color: #ff4d4f;
+                }
+            }
+        }
+    }
+
+    .cartFooter {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+
+        .total {
+            font-size: 18px;
+            font-weight: 600;
+
+            span:first-child {
+                margin-right: 10px;
+            }
+        }
+
+        button {
+            padding: 10px 25px;
+            background: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+
+            &:hover {
+                background: #218838;
+            }
+        }
+    }
+}

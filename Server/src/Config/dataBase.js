@@ -1,6 +1,6 @@
-import mysql from "mysql2";
+import mysql from "mysql2/promise";
 
-const dataBase = mysql.createConnection({
+const dataBase = await mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "191006",

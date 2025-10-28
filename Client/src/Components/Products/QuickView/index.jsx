@@ -9,10 +9,13 @@ import {
 } from "../../../Assets";
 import QualitySelector from "../../QualitySelector";
 
-export default function QuickView({ image, title, price, onClose }) {
+export default function QuickView({ image, title, price, onClose, onAddToCart }) {
   return (
     <div className={style.quickViewWrapper} onClick={onClose}>
-      <div className={style.quickViewContainer} onClick={(e) => e.stopPropagation()}>
+      <div
+        className={style.quickViewContainer}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className={style.overlay}></div>
 
         <div className={style.quickViewBox}>
@@ -78,11 +81,14 @@ export default function QuickView({ image, title, price, onClose }) {
 
             <div className={style.CTA}>
               <QualitySelector />
-              <Button fill className={style.btnAdd}>
+              <Button fill className={style.btnAdd} onClick={onAddToCart}>
                 Add to Cart
               </Button>
             </div>
           </div>
+          <button className={style.btnClose} onClick={onClose}>
+            x
+          </button>
         </div>
       </div>
     </div>

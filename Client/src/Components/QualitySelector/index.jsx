@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, createContext, useContext } from "react";
 
 import style from "./QualitySelector.module.scss";
+
+const ThemeContext = createContext(null);
 
 export default function QualitySelector() {
   const [quantity, setQuantity] = useState(0);
@@ -21,6 +23,9 @@ export default function QualitySelector() {
       setQuantity(1);
     }
   };
+
+  const theme = useContext(ThemeContext);
+
   return (
     <div className={style.qualityContainer}>
       <button className={style.btnQuality} onClick={decrease}>

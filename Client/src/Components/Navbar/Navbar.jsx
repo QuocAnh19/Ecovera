@@ -1,10 +1,20 @@
+import React from "react";
+import { useEffect, useState } from "react";
+
 import style from "./Navbar.module.scss";
 
 import NavbarNavigation from "../../Layouts/Navigation/NavbarNavigation";
+import ShoppingCart from "../ShoppingCart";
 import { IconCart } from "../../Assets";
 
 
 export default function Navbar() {
+  const [showCart, setShowCart] = useState(false);
+
+  const handleToggleCart = () => {
+    setShowCart(prev => !prev);
+  };
+
   return (
     <div className={style.navbarContainer}>
       <div className={`margin-auto ${style.smallOne}`}>
@@ -34,9 +44,10 @@ export default function Navbar() {
           </div>
           <button className={style.btnSearch}>Search</button>
         </div>
-        <div className={style.icons}>
+        <div className={style.icons} onClick={handleToggleCart}>
           <IconCart className={style.iconCart}/>
           <div className={style.shoppingCard}>Shopping Card</div>
+          {showCart && <ShoppingCart />}
         </div>
       </div>
       <div className={style.backgroundNavLinks}>

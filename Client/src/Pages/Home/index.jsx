@@ -1,3 +1,4 @@
+import { createContext, useContext } from 'react';
 
 import style from "./Home.module.scss";
 
@@ -10,22 +11,25 @@ import BannerSaleHome from "../../Components/Banner/BannerSaleHome";
 import Footer from "../../Components/Footer";
 import LatestNews from "../../Components/LatestNews";
 
-
+const ThemeContext = createContext(null);
 
 export default function Home() {
-  
+  const theme = useContext(ThemeContext);
+
   return (
-    <div className={style.homeContainer}>
-      <Navbar />
-      <div className={`margin-auto ${style.homeContent}`}>
-        <HeroBanner />
-        <Featured />
-        <Categories />
-        <Products />
-        <BannerSaleHome />
-        <LatestNews />
+    <ThemeContext>
+      <div className={style.homeContainer}>
+        <Navbar />
+        <div className={`margin-auto ${style.homeContent}`}>
+          <HeroBanner />
+          <Featured />
+          <Categories />
+          <Products />
+          <BannerSaleHome />
+          <LatestNews />
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </ThemeContext>
   );
 }

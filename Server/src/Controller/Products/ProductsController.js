@@ -1,23 +1,33 @@
-import ProductModel from "../../Models/Products/ProductsModel.js";
+import ProductsModel from "../../Models/Products/ProductsModel.js";
 
-export const getProducts = (req, res) => {
-  ProductModel.getAll((err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
-  });
+const ProductsController = {
+  // Lấy danh sách sản phẩm
+  async getAll(req, res) {
+    try {
+      const products = await ProductsModel.getAll();
+      res.json(products);
+    } catch (error) {
+      console.error("❌ Error fetching products:", error);
+      res.status(500).json({ message: "Error fetching products" });
+    }
+  },
+
+  // Lấy sản phẩm theo ID
+  async getById(req, res) {
+    try {
+      const { id } = req.params;
+      const product = await ProductsModel.getById(id);
+
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      res.json(product);
+    } catch (error) {
+      console.error("❌ Error fetching product:", error);
+      res.status(500).json({ message: "Error fetching product" });
+    }
+  },
 };
 
-export const addProduct = (req, res) => {
-  const { name, price, description } = req.body;
-  const image = req.file ? req.file.filename : null;
-
-  if (!name || !price)
-    return res.status(400).json({ message: "Name and price are required" });
-
-  const newProduct = { name, price, description, image };
-
-  ProductModel.create(newProduct, (err) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json({ message: "✅ Product added successfully!" });
-  });
-};
+export default ProductsController;

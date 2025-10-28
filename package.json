@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node Server/server.js",
+    "client": "npm start --prefix Client",
+    "server": "npm run dev --prefix Server",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  }
+}

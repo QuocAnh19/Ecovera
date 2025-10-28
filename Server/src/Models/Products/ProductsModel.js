@@ -1,14 +1,19 @@
 import dataBase from "../../Config/dataBase.js";
 
-const ProductModel = {
-  getAll: (callback) => {
-    dataBase.query("SELECT * FROM products", callback);
+const ProductsModel = {
+  // Lấy toàn bộ sản phẩm
+  async getAll() {
+    const [rows] = await dataBase.query("SELECT * FROM Products");
+    return rows;
   },
 
-  create: (product, callback) => {
-    const sql = "INSERT INTO products (name, price, description, image) VALUES (?, ?, ?, ?)";
-    dataBase.query(sql, [product.name, product.price, product.description, product.image], callback);
+  // Lấy sản phẩm theo ID
+  async getById(id) {
+    const [rows] = await dataBase.query("SELECT * FROM Products WHERE id = ?", [
+      id,
+    ]);
+    return rows[0];
   },
 };
 
-export default ProductModel;
+export default  ProductsModel;
