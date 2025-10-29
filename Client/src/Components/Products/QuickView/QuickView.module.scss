@@ -12,115 +12,111 @@
     justify-content: center;
     align-items: center;
     z-index: 999;
-}
 
-.quickViewContainer {
-    display: flex;
-    flex-direction: row;
-    justify-items: center;
-    align-items: center;
-    width: 1320px;
-    height: 636px;
-    background-color: #fff;
-    border-radius: 12px;
-    border: 1px solid $Grey-200;
-    padding: 32px;
-    position: relative;
-    z-index: 1000;
-
-    .quickViewBox {
+    .quickViewContainer {
         display: flex;
         flex-direction: row;
+        justify-items: center;
+        align-items: center;
+        width: 1320px;
+        height: 636px;
+        background-color: #fff;
+        border-radius: 12px;
+        border: 1px solid $Grey-200;
+        padding: 32px;
+        position: relative;
+        z-index: 1000;
 
-        .imageBox {
-            .img {
-                width: 556px;
-                height: 556px;
-                object-fit: cover;
-                border-radius: 10px;
-            }
-        }
-
-        .content {
+        .quickViewBox {
             display: flex;
-            flex-direction: column;
-            gap: 24px;
-            width: 568px;
-            margin-left: 24px;
+            flex-direction: row;
 
-            .heading {
+            .imageBox {
+                .img {
+                    width: 556px;
+                    height: 556px;
+                    object-fit: cover;
+                    border-radius: 10px;
+                }
+            }
+
+            .content {
                 display: flex;
                 flex-direction: column;
-                gap: 40px;
+                gap: 24px;
+                width: 568px;
+                margin-left: 24px;
 
-                .price {
-                    font-size: $font-size-xxl;
-                    font-weight: $font-weight-medium;
-                    color: $Primary-color;
-                }
-            }
-
-            .brand {
-                display: flex;
-                flex-direction: column;
-                gap: 16px;
-
-                .brandBox {
+                .heading {
                     display: flex;
-                    justify-content: space-between;
-                    flex-direction: row;
+                    flex-direction: column;
+                    gap: 40px;
 
-                    .left {
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        gap: 10px;
-                    }
-
-                    .right {
-                        display: flex;
-                        flex-direction: row;
-                        gap: 10px;
-                        align-items: center;
+                    .price {
+                        font-size: $font-size-xxl;
+                        font-weight: $font-weight-medium;
+                        color: $Primary-color;
                     }
                 }
-            }
 
-            .CTA {
-                display: flex;
-                flex-direction: row;
-                gap: 12px;
+                .brand {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
 
-                .btnAdd {
+                    .brandBox {
+                        display: flex;
+                        justify-content: space-between;
+                        flex-direction: row;
+
+                        .left {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            gap: 10px;
+                        }
+
+                        .right {
+                            display: flex;
+                            flex-direction: row;
+                            gap: 10px;
+                            align-items: center;
+                        }
+                    }
+                }
+
+                .CTA {
                     display: flex;
                     flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
-                    width: 368px;
+                    gap: 12px;
+
+                    .btnAdd {
+                        width: 368px;
+                    }
                 }
+            }
+
+            .btnClose {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: transparent;
+                border: none;
+                font-size: 20px;
+                cursor: pointer;
+                color: $Grey-800;
+                z-index: 10;
+                padding: 6px;
+                border-radius: 50%;
+                transition: background 0.2s;
+                text-align: center;
+            }
+
+            .btnClose:hover {
+                background: $Grey-50;
             }
         }
 
-        .btnClose {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: transparent;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: $Grey-800;
-            z-index: 10;
-            padding: 6px;
-            border-radius: 50%;
-            transition: background 0.2s;
-            text-align: center;
-        }
 
-        .btnClose:hover {
-            background: $Grey-50;
-        }
     }
-
-
 }

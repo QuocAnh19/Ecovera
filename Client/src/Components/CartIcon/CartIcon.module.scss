@@ -1,0 +1,53 @@
+@use "../../Styles/variable" as *;
+
+.cartIconWrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    position: relative;
+
+    .iconBox {
+        position: relative;
+
+        .iconCart {
+            width: 32px;
+            height: 32px;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background-color: $Hard-Primary-color;
+            color: $White-color;
+            font-size: 10px;
+            font-weight: $font-weight-medium;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .cartInfo {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 7px;
+
+        .label {
+            font-size: 11px;
+            color: $Grey-700;
+        }
+
+        .total {
+            font-weight: $font-weight-medium;
+            font-size: $font-size-tiny;
+            color: $Grey-900;
+        }
+    }
+
+}

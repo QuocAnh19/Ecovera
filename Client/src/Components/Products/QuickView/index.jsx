@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useCart } from "../../../ConText/CartContext";
+
 import style from "./QuickView.module.scss";
 import Button from "../../Button";
 import {
@@ -9,7 +12,17 @@ import {
 } from "../../../Assets";
 import QualitySelector from "../../QualitySelector";
 
-export default function QuickView({ image, title, price, onClose, onAddToCart }) {
+export default function QuickView({ id, image, title, price, onClose }) {
+  const { addToCart } = useCart();
+  const [quantity, setQuantity] = useState(1);
+
+  const handleAdd = () => {
+    const product = { id, title, image, price };
+    console.log("Adding product:", product);
+    addToCart(product, quantity);
+    onClose();
+  };
+
   return (
     <div className={style.quickViewWrapper} onClick={onClose}>
       <div
@@ -80,8 +93,8 @@ export default function QuickView({ image, title, price, onClose, onAddToCart })
             </div>
 
             <div className={style.CTA}>
-              <QualitySelector />
-              <Button fill className={style.btnAdd} onClick={onAddToCart}>
+              <QualitySelector value={quantity} onChange={setQuantity} />
+              <Button fill className={style.btnAdd} onClick={handleAdd}>
                 Add to Cart
               </Button>
             </div>

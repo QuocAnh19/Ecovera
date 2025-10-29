@@ -1,0 +1,98 @@
+@use "../../Styles/variable" as *;
+@use "../../Styles/typography" as *;
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    margin-top: 80px;
+    margin-bottom: 80px;
+
+
+    .formContainer {
+        background: #fff;
+        padding: 0 24px 24px 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        width: 520px;
+        height: 432px;
+        text-align: center;
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s;
+
+            &:focus {
+                border-color: $Primary-color;
+                box-shadow: 0 0 0 2px rgba(0, 166, 63, 0.15);
+            }
+        }
+
+        .passwordGroup {
+            position: relative;
+
+            .eyeIcon {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                font-size: 0.9rem;
+                color: #666;
+            }
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+
+            input {
+                cursor: pointer;
+            }
+        }
+
+
+        .loginBtn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: $Primary-color;
+            color: #fff;
+            border: none;
+            border-radius: 9999px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease;
+
+            &:hover {
+                background-color: $Hard-Primary-color;
+            }
+        }
+
+        .registerText {
+            margin-top: 20px;
+
+            a {
+                color: $Grey-900;
+                font-weight: 600;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}

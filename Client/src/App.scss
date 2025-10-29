@@ -28,10 +28,20 @@ input{
   line-height: 150%;
   color: $Grey-500;
 }
+
 p {
   font-size: $font-size-tiny;
   font-weight: $font-weight-regular;
   line-height: 150%;
   color: $Grey-400;
+}
+
+label{
+  display: flex;
+  align-items: center;
+  font-size: $font-size-tiny;
+  font-weight: $font-weight-regular;
+  line-height: 150%;
+  color: $Grey-900;
 }
 

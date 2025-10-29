@@ -1,18 +1,16 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import style from "./Navbar.module.scss";
 
 import NavbarNavigation from "../../Layouts/Navigation/NavbarNavigation";
-import ShoppingCart from "../ShoppingCart";
-import { IconCart } from "../../Assets";
-
+import CartIcon from "../CartIcon";
 
 export default function Navbar() {
-  const [showCart, setShowCart] = useState(false);
+  const navigate = useNavigate();
 
-  const handleToggleCart = () => {
-    setShowCart(prev => !prev);
+  const handleGoToCart = () => {
+    navigate("/shoppingCart");
   };
 
   return (
@@ -44,11 +42,7 @@ export default function Navbar() {
           </div>
           <button className={style.btnSearch}>Search</button>
         </div>
-        <div className={style.icons} onClick={handleToggleCart}>
-          <IconCart className={style.iconCart}/>
-          <div className={style.shoppingCard}>Shopping Card</div>
-          {showCart && <ShoppingCart />}
-        </div>
+        <CartIcon handleGoToCart={handleGoToCart} />
       </div>
       <div className={style.backgroundNavLinks}>
         <div className={`margin-auto ${style.navLinks}`}>

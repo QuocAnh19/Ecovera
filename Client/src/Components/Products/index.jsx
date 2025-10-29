@@ -6,7 +6,6 @@ import style from "./Products.module.scss";
 import Button from "../Button";
 import Tag from "../Tag";
 import QuickView from "./QuickView";
-import ShoppingCart from "../ShoppingCart";
 
 import { IconArrow, IconCart } from "../../Assets";
 
@@ -16,13 +15,17 @@ export default function Products() {
   const [cartItems, setCartItems] = useState([]); // giỏ hàng
 
   const handleAddToCart = (item) => {
-    const exist = cartItems.find(ci => ci.id === item.id);
+    const exist = cartItems.find((ci) => ci.id === item.id);
     if (exist) {
-      setCartItems(cartItems.map(ci => ci.id === item.id ? { ...ci, quantity: ci.quantity + 1 } : ci));
+      setCartItems(
+        cartItems.map((ci) =>
+          ci.id === item.id ? { ...ci, quantity: ci.quantity + 1 } : ci
+        )
+      );
     } else {
       setCartItems([...cartItems, { ...item, quantity: 1 }]);
     }
-    setSelectedItem(null); // đóng modal sau khi thêm
+    setSelectedItem(null);
   };
 
   useEffect(() => {
@@ -49,7 +52,7 @@ export default function Products() {
       </div>
 
       <div className={style.productsBox}>
-        {products.map((item, index) => (
+        {products.slice(0, 10).map((item, index) => (
           <div
             key={index}
             className={style.productsItem}
@@ -92,6 +95,7 @@ export default function Products() {
 
       {selectedItem && (
         <QuickView
+          id={selectedItem.id}
           image={selectedItem.image}
           title={selectedItem.title}
           price={selectedItem.price}
@@ -99,8 +103,6 @@ export default function Products() {
           onAddToCart={() => handleAddToCart(selectedItem)}
         />
       )}
-
-      <ShoppingCart cartItems={cartItems} setCartItems={setCartItems} />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 
 import style from "./Button.module.scss";
 
@@ -10,6 +11,7 @@ export default function Button({
   fillCircle = false,
   children,
   href,
+  onClick,
   size = "medium",
   className,
   ...passProps
@@ -21,10 +23,21 @@ export default function Button({
     [style.fillCircle]: fillCircle,
   });
 
-  const Component = href ? "a" : "button";
+  const navigate = useNavigate();
+
+  const handleClick = (e) => {
+    if (href) {
+      e.preventDefault();
+      navigate(href); // ✅ chuyển trang bằng React Router
+    } else if (onClick) {
+      onClick(e);
+    }
+  };
+
+  const Component = "button";
 
   return (
-    <Component className={classNames} href={href} {...passProps}>
+    <Component className={classNames} onClick={handleClick} {...passProps}>
       {children}
       {icon}
     </Component>

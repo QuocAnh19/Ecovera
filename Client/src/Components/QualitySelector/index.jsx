@@ -1,30 +1,33 @@
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, useEffect } from "react";
 
 import style from "./QualitySelector.module.scss";
 
-const ThemeContext = createContext(null);
+export default function QualitySelector({ value, onChange }) {
+  const [quantity, setQuantity] = useState(value ?? 1);
 
-export default function QualitySelector() {
-  const [quantity, setQuantity] = useState(0);
+  // Nếu prop value thay đổi từ bên ngoài, đồng bộ lại
+  useEffect(() => {
+    if (value !== undefined) setQuantity(value);
+  }, [value]);
 
   const increase = () => {
-    setQuantity((prev) => prev + 1);
+    const newVal = quantity + 1;
+    setQuantity(newVal);
+    onChange?.(newVal);
   };
 
   const decrease = () => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+    const newVal = quantity > 1 ? quantity - 1 : 1;
+    setQuantity(newVal);
+    onChange?.(newVal);
   };
 
   const handleChange = (e) => {
-    const value = Number(e.target.value);
-    if (value >= 1) {
-      setQuantity(value);
-    } else {
-      setQuantity(1);
-    }
+    let newVal = Number(e.target.value);
+    if (isNaN(newVal) || newVal < 1) newVal = 1;
+    setQuantity(newVal);
+    onChange?.(newVal);
   };
-
-  const theme = useContext(ThemeContext);
 
   return (
     <div className={style.qualityContainer}>
