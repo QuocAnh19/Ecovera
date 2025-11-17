@@ -1,0 +1,92 @@
+@use "../../Styles/variable" as *;
+@use "../../Styles/typography" as *;
+
+.contactContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    max-width: 1520px;
+    gap: 24px;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    margin: 0 auto;
+
+    .left {
+        display: flex;
+        flex-direction: column;
+        width: 312px;
+        padding: 24px;
+        gap: 24px;
+        border-radius: 8px;
+        box-shadow: 0 8px 20px rgba(1, 17, 2, 0.08);
+
+        .address,
+        .email,
+        .call {
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
+            align-items: center;
+            text-align: center;
+        }
+
+    }
+
+    .right {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 984px;
+        padding: 50px;
+        border-radius: 8px;
+        box-shadow: 0 8px 20px rgba(1, 17, 2, 0.08);
+
+
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+
+            .inputRow {
+                display: flex;
+                flex-direction: row;
+                padding: 14px;
+                border: 1px solid #ccc;
+                width: 100%;
+                border-radius: 6px;
+                font-size: $font-size-tiny;
+                font-weight: $font-weight-regular;
+                color: $Grey-400;
+
+                &:focus {
+                    outline: none;
+                    border-color: $Primary-color;
+                    box-shadow: 0 0 4px rgba(0, 178, 7, 0.3);
+                }
+
+            }
+
+            textarea {
+                width: 100%;
+                min-height: 80px;
+                padding: 0.7rem;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                resize: vertical;
+                margin-top: 8px;
+
+                &:focus {
+                    outline: none;
+                    border-color: $Primary-color;
+                    box-shadow: 0 0 4px rgba(0, 178, 7, 0.3);
+                }
+            }
+        }
+
+        .btn {
+            width: 200px;
+        }
+    }
+}

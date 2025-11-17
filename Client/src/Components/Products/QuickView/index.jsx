@@ -12,16 +12,26 @@ import {
 } from "../../../Assets";
 import QualitySelector from "../../QualitySelector";
 
-export default function QuickView({ id, image, title, price, onClose }) {
+export default function QuickView({
+  id,
+  image,
+  name,
+  salePrice,
+  originalPrice,
+  onClose,
+}) {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
 
   const handleAdd = () => {
-    const product = { id, title, image, price };
+    window.scrollTo({top: 200, behavior: "smooth"});
+    const product = { id, name, image, salePrice, originalPrice };
     console.log("Adding product:", product);
     addToCart(product, quantity);
     onClose();
   };
+
+  const hasSale = salePrice && salePrice !== null;
 
   return (
     <div className={style.quickViewWrapper} onClick={onClose}>
@@ -39,7 +49,7 @@ export default function QuickView({ id, image, title, price, onClose }) {
                   ? `http://localhost:5000/uploads/${image}`
                   : "/default.png"
               }
-              alt={title}
+              alt={name}
               className={style.img}
             />
           </div>
@@ -47,9 +57,18 @@ export default function QuickView({ id, image, title, price, onClose }) {
           <div className={style.content}>
             <div className={style.heading}>
               <div className={style.title}>
-                <h4>{title}</h4>
+                <h4>{name}</h4>
               </div>
-              <div className={style.price}>${price}</div>
+              <div className={style.price}>
+                {hasSale ? (
+                  <>
+                    <div className={style.salePrice}>${salePrice}</div>
+                    <div className={style.originalPrice}>${originalPrice}</div>
+                  </>
+                ) : (
+                  <div className={style.salePrice}>${originalPrice}</div>
+                )}
+              </div>
             </div>
 
             <div className={style.brand}>

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import style from "./Register.module.scss";
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -21,7 +25,8 @@ export default function Register() {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-// Xử lý submit
+
+  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -29,7 +34,6 @@ export default function Register() {
       alert("Please accept the terms & conditions");
       return;
     }
-
     if (form.password !== form.confirmPassword) {
       alert("Passwords do not match!");
       return;
@@ -38,33 +42,37 @@ export default function Register() {
     try {
       setLoading(true);
 
-      // Gửi request đến backend
       const res = await fetch("http://localhost:5000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-        }),
+        body: JSON.stringify({ email: form.email, password: form.password }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
         alert("✅ " + data.message);
-        setForm({ email: "", password: "", confirmPassword: "", accept: false });
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        setForm({
+          email: "",
+          password: "",
+          confirmPassword: "",
+          accept: false,
+        });
+        navigate("/signin");
       } else {
         alert("❌ " + data.message);
       }
     } catch (err) {
-      console.error("Error:", err);
+      console.error(err);
       alert("Server error!");
     } finally {
       setLoading(false);
     }
   };
 
-  
   return (
     <div className={style.wrapper}>
       <form className={style.formContainer} onSubmit={handleSubmit}>
@@ -128,11 +136,7 @@ export default function Register() {
         </label>
 
         {/* Submit */}
-        <button
-          type="submit"
-          className={style.createBtn}
-          disabled={loading}
-        >
+        <button type="submit" className={style.createBtn} disabled={loading}>
           {loading ? "Creating..." : "Create Account"}
         </button>
 

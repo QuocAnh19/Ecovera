@@ -106,6 +106,8 @@
                             font-size: $font-size-tiny;
                             font-weight: $font-weight-medium;
                             color: $White-color;
+                            padding-bottom: 6px;
+                            border-bottom: 2px solid $Primary-color;
                             cursor: pointer;
                         }
                     }

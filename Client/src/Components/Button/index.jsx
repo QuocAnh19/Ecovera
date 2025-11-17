@@ -9,6 +9,7 @@ export default function Button({
   ghost = false,
   icon = false,
   fillCircle = false,
+  closeBorder = false,
   children,
   href,
   onClick,
@@ -21,6 +22,7 @@ export default function Button({
     [style.border]: border,
     [style.ghost]: ghost,
     [style.fillCircle]: fillCircle,
+    [style.closeBorder]: closeBorder,
   });
 
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ export default function Button({
   const handleClick = (e) => {
     if (href) {
       e.preventDefault();
-      navigate(href); // ✅ chuyển trang bằng React Router
+      navigate(href);
     } else if (onClick) {
       onClick(e);
     }

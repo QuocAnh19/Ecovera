@@ -23,7 +23,7 @@ export default function Footer() {
             <Button fill>Subscribe</Button>
           </div>
           <div className={style.iconSocial}>
-              <Button size="circleSocial" fillCircle  icon={<IconFacebook />}></Button>
+              <Button size="circleSocial" fillCircle icon={<IconFacebook />}></Button>
               <Button size="circleSocial" fillCircle icon={<IconTwitter />}></Button>
               <Button size="circleSocial" fillCircle icon={<IconPinterest />}></Button>
               <Button size="circleSocial" fillCircle icon={<IconInstagram />}></Button>
@@ -40,9 +40,9 @@ export default function Footer() {
               </div>
               <p>Morbi cursus porttitor enim lobortis molestie. Duis gravida turpis dui, eget bibendum magna congue nec.</p>
               <div className={style.cta}>
-                <button>(219) 555-0114</button>
+                <button className={style.btnCTA}>(219) 555-0114</button>
                 <p>or</p>
-                <button>Proxy@gmail.com</button>
+                <button className={style.btnCTA}>Proxy@gmail.com</button>
               </div>
             </div>
             <div className={style.right}>

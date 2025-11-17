@@ -11,7 +11,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 999;
+    z-index: 99999;
 
     .quickViewContainer {
         display: flex;
@@ -53,9 +53,19 @@
                     gap: 40px;
 
                     .price {
+                        display: flex;
+                        flex-direction: row;
+                        gap: 4px;
                         font-size: $font-size-xxl;
                         font-weight: $font-weight-medium;
                         color: $Primary-color;
+
+                        .originalPrice {
+                            color: $Grey-400;
+                            text-decoration: line-through;
+                        }
+
+                        .salePrice {}
                     }
                 }
 

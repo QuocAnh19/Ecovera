@@ -66,16 +66,12 @@
             }
 
             .removeBtn {
-                background: none;
-                border: none;
-                font-size: 18px;
-                color: #888;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 cursor: pointer;
                 transition: color 0.2s;
 
-                &:hover {
-                    color: #ff4d4f;
-                }
             }
         }
     }
@@ -97,6 +93,11 @@
 
         .btnSubmit{
             width: 376px;
+
+            &.unavailable{
+                cursor: not-allowed;
+            }
         }
+
     }
 }

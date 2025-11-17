@@ -12,11 +12,12 @@
         margin-right: 100px;
 
         .btn {
+            display: flex;
             color: $Primary-color;
             font-size: $font-size-small;
             font-weight: $font-weight-medium;
-            display: flex;
             gap: 12px;
+            align-items: center;
         }
     }
 

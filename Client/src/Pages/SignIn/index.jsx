@@ -47,6 +47,10 @@ export default function SignIn() {
         if (form.remember) {
           localStorage.setItem("user", JSON.stringify(data.user));
         }
+
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        
         setForm({ email: "", password: "", remember: false });
 
         navigate("/");

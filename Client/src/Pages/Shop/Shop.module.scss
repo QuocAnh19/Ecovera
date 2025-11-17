@@ -1,6 +1,17 @@
 @use '../../Styles/variable' as *;
 @use '../../Styles/typography' as *;
 
-.shopContainer{
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: auto;
+    margin: 100px;
+
+    .left{
+    }
+
     
+
+
 }

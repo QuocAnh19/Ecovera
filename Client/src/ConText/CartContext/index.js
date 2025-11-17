@@ -1,38 +1,39 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
-// Tạo context
 const CartContext = createContext();
 
-// Custom hook để dễ dùng
 export const useCart = () => useContext(CartContext);
 
 // Provider bọc toàn bộ app
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    // Lưu cart vào localStorage để không bị mất khi reload
+    const saved = localStorage.getItem("cartItems");
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  // 🛒 Hàm thêm sản phẩm
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
   const addToCart = (product, quantity = 1) => {
     setCartItems((prevItems) => {
       const existing = prevItems.find((item) => item.id === product.id);
       if (existing) {
-        // Nếu sản phẩm đã có, tăng số lượng
         return prevItems.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
-      // Nếu chưa có, thêm mới
       return [...prevItems, { ...product, quantity }];
     });
   };
 
-  // 🗑️ Xóa sản phẩm (optional)
   const removeFromCart = (id) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  // 🔄 Cập nhật số lượng sản phẩm
   const updateQuantity = (id, newQty) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -41,8 +42,30 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+    localStorage.removeItem("cartItems");
+  };
+
+  const cartCount = cartItems.length;
+
+  const cartTotal = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity }}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        cartCount,
+        cartTotal,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

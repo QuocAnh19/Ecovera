@@ -5,17 +5,16 @@ import style from "./ShoppingCart.module.scss";
 import Button from "../Button";
 import QualitySelector from "../QualitySelector";
 import { useCart } from "../../ConText/CartContext";
+import { IconClose } from "../../Assets/Icon";
 
 export default function ShoppingCart() {
-
-
   const { cartItems, removeFromCart, updateQuantity } = useCart();
 
   // Tính subtotal và tổng
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const subtotal = cartItems.reduce((sum, item) => {
+    const price = item.salePrice ? item.salePrice : item.originalPrice;
+    return sum + price * item.quantity;
+  }, 0);
 
   return (
     <div className={style.shoppingCartContainer}>
@@ -29,37 +28,45 @@ export default function ShoppingCart() {
           <span>Subtotal</span>
         </div>
 
-        {cartItems.map((item) => (
-          <div key={item.id} className={style.cartRow}>
-            <div className={style.product}>
-              <img
-                src={`http://localhost:5000/uploads/${item.image}`}
-                alt={item.title}
-              />
-              <span>{item.title}</span>
+        {cartItems.map((item) => {
+          const price = item.salePrice ? item.salePrice : item.originalPrice;
+
+          return (
+            <div key={item.id} className={style.cartRow}>
+              <div className={style.product}>
+                <img
+                  src={`http://localhost:5000/uploads/${item.image}`}
+                  alt={item.name}
+                />
+                <span>{item.name}</span>
+              </div>
+
+              <div className={style.price}>
+                ${price}
+              </div>
+
+              <div className={style.quantity}>
+                <QualitySelector
+                  value={item.quantity}
+                  onChange={(newQty) => updateQuantity(item.id, newQty)}
+                />
+              </div>
+
+              <div className={style.subtotal}>
+                ${(price * item.quantity).toFixed(2)}
+              </div>
+
+              <Button
+                size="circleCloseBorder"
+                closeBorder
+                className={style.removeBtn}
+                onClick={() => removeFromCart(item.id)}
+              >
+                <IconClose />
+              </Button>
             </div>
-
-            <div className={style.price}>${item.price}</div>
-
-            <div className={style.quantity}>
-              <QualitySelector
-                value={item.quantity}
-                onChange={(newQty) => updateQuantity(item.id, newQty)}
-              />
-            </div>
-
-            <div className={style.subtotal}>
-              ${(item.price * item.quantity).toFixed(2)}
-            </div>
-
-            <button
-              className={style.removeBtn}
-              onClick={() => removeFromCart(item.id)}
-            >
-              X
-            </button>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className={style.cartFooter}>
@@ -67,7 +74,14 @@ export default function ShoppingCart() {
           <span>Total:</span>
           <span>${subtotal.toFixed(2)}</span>
         </div>
-        <Button fill className={style.btnSubmit} href={"/checkout"}>Proceed to checkout</Button>
+        <Button
+          fill
+          className={`${style.btnSubmit}`}
+          href={"/checkout"}
+          disabled={cartItems.length == 0 ? true : false}
+        >
+          Proceed to checkout
+        </Button>
       </div>
     </div>
   );

@@ -10,10 +10,10 @@ export default function CartIcon({ handleGoToCart }) {
 
   const uniqueProductCount = cartItems.length;
 
-  const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const totalPrice = cartItems.reduce((sum, item) => {
+    const price = item.salePrice ? item.salePrice : item.price;
+    return sum += price * item.quantity;
+  }, 0);
 
   return (
     <div className={style.cartIconWrapper} onClick={handleGoToCart}>

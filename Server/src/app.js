@@ -3,21 +3,23 @@ import cors from "cors";
 import path from "path";
 
 import routes from "./Routes/index.js";
-import authRoutes from "./Routes/Auth/Auth.js";
 import loginRoutes from "./Routes/Auth/Login.js";
+import OrderRoutes from "./Routes/Payment/OrderRoutes.js";
+import RegisterRoutes from "./Routes/Auth/Register.js";
+import userRoutes from "./Routes/User/UsersRoutes.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.use("/uploads", express.static(path.join(process.cwd(), "src/uploads")));
-
-// const paymentRoutes = require("./routes/payment");
-// app.use(paymentRoutes);
-
 app.use("/app", routes);
 
-app.use("/api", authRoutes);
+app.use("/api", RegisterRoutes);
 app.use("/api", loginRoutes);
+
+app.use("/api/orders", OrderRoutes);
+
+app.use("/api/users", userRoutes);
 
 export default app;

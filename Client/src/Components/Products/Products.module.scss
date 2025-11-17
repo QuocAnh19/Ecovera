@@ -12,11 +12,12 @@
         margin-right: 100px;
 
         .btn {
+            display: flex;
             color: $Primary-color;
             font-size: $font-size-small;
             font-weight: $font-weight-medium;
-            display: flex;
             gap: 12px;
+            align-items: center;
         }
     }
 
@@ -71,9 +72,19 @@
                     }
 
                     .price {
+                        display: flex;
+                        flex-direction: row;
+                        gap: 4px;
                         font-size: $font-size-small;
                         font-weight: $font-weight-medium;
                         color: $Grey-900;
+
+                        .originalPrice {
+                            color: $Grey-400;
+                            text-decoration: line-through;
+                        }
+
+                        .salePrice {}
                     }
                 }
 

@@ -1,0 +1,132 @@
+@use "../../Styles/variable" as *;
+@use "../../Styles/typography" as *;
+
+.aboutContainer {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    max-width: 1520px;
+    padding-top: 80px;
+    margin: 0 auto;
+
+    .aboutUs,
+    .aboutMe,
+    .weDelivered {
+        display: flex;
+        flex-direction: row;
+
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 32px;
+
+            p {
+                text-align: justify;
+            }
+        }
+
+    }
+
+    .aboutUs {
+        display: flex;
+        padding: 0 100px 0 100px;
+        margin-bottom: 80px;
+        gap: 58px;
+    }
+
+    .aboutMe {
+        padding-right: 100px;
+        margin-bottom: 80px;
+
+        .featureBox {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+
+            .featureItem {
+                display: flex;
+                flex-direction: row;
+                gap: 16px;
+                margin: 12px 12px 12px 0;
+
+
+                .icon {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 72px;
+                    height: 72px;
+                    border-radius: 50%;
+                    background-color: rgba(0, 178, 7, 0.1);
+                }
+
+                .text {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 8px;
+
+                    .title {
+                        font-size: $font-size-medium;
+                        font-weight: $font-weight-medium;
+                        color: $Grey-900;
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    .weDelivered {
+        display: flex;
+        padding: 0 0 0 100px;
+        gap: 30px;
+
+        .featureWeBox {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            .featureWeItem {
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+
+                .iconCheck {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    background-color: rgba(0, 178, 7, 0.1);
+                }
+            }
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            width: 192px;
+
+            path {
+                stroke: $White-color;
+            }
+        }
+
+    }
+
+    .companyLogo {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        padding: 80px 100px 80px 100px;
+        border-top: 2px solid $Grey-50;
+    }
+}

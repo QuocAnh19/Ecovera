@@ -25,14 +25,15 @@
         min-width: 152px;
     }
 
-    &.circle{
+    &.circle {
         width: 40px;
         height: 40px;
         border-radius: 50%;
         background-color: $Grey-50;
 
-        &:hover{
+        &:hover {
             background-color: $Primary-color;
+
             path {
                 fill: $Primary-color;
                 stroke: $White-color;
@@ -40,17 +41,23 @@
         }
     }
 
+    &.circleCloseBorder {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+    }
+
     // Footer
-    &.circleSocial{
+    &.circleSocial {
         display: flex;
         justify-content: center;
         align-items: center;
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        
 
-        &:hover{
+
+        &:hover {
             background-color: $Primary-color;
             color: $White-color;
         }
@@ -61,16 +68,21 @@
         background-color: $Primary-color;
         color: $White-color;
 
-        &:hover{
+        &:hover {
             background-color: $Hard-Primary-color;
         }
     }
 
-    &.fillCircle{
+    &.fillCircle {
         background-color: #F7F7F7;
 
-        &:hover{
+        &:hover {
             background-color: $Primary-color;
+
+            path {
+
+                fill: $White-color
+            }
         }
     }
 
@@ -94,6 +106,22 @@
         &:hover {
             background-color: rgba(44, 116, 47, 0.2);
             color: $Hard-Primary-color;
+        }
+    }
+
+    &.closeBorder {
+        border: 1px solid $Grey-200;
+
+        path {
+            stroke: $Grey-200;
+        }
+
+        &:hover {
+            border: 1px solid $Grey-900;
+
+            path {
+                stroke: $Grey-900;
+            }
         }
     }
 

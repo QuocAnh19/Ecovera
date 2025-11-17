@@ -1,4 +1,4 @@
-import AppRoutes from "./Routes/AppRoutes";
+import AppRoutes from "./Routes";
 
 import "./App.scss";
 import { CartProvider } from "./ConText/CartContext";

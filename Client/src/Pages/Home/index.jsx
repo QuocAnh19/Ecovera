@@ -1,6 +1,6 @@
 import style from "./Home.module.scss";
 
-import HeroBanner from "../../Components/Banner/BannerHome/HeroBanner";
+import HeroBanner from "../../Components/Banner/BannerHome";
 import Featured from "../../Components/Featured";
 import Categories from "../../Components/Categories";
 import Products from "../../Components/Products";

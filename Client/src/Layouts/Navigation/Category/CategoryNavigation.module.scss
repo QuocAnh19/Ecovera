@@ -1,0 +1,82 @@
+@use "../../../Styles/variable" as *;
+
+.container {
+    width: 312px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid $Grey-200;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: $font-weight-medium;
+        font-size: $font-size-large;
+        cursor: pointer;
+        padding-bottom: 20px;
+
+        path {
+            stroke: $Grey-900;
+            stroke-width: 2;
+        }
+    }
+
+    .list {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+
+
+        .item {
+            label {
+                display: flex;
+                gap: 8px;
+                height: auto;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                cursor: pointer;
+
+                .radio {
+                    appearance: none;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    border: 1px solid $Grey-200;
+                    background-color: $White-color;
+                    position: relative;
+                    cursor: pointer;
+                    padding: 0;
+
+                    &:hover {
+                        border-color: $Primary-color;
+                    }
+
+                    &:checked {
+                        border: 1px solid $Primary-color;
+
+                    }
+
+                    &:checked::before {
+                        display: flex;
+                        content: "";
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 12px;
+                        height: 12px;
+                        background: $Primary-color;
+                        border-radius: 50%;
+                    }
+                }
+            }
+
+            .count {
+                color: $Grey-500;
+                font-size: $font-size-tiny;
+                font-weight: $font-weight-regular;
+            }
+
+        }
+    }
+
+}
