@@ -25,35 +25,51 @@ function ScrollToTop() {
 }
 
 export default function AppRoutes() {
+  function AppLayout() {
+    const location = useLocation();
+
+    const hideNavPaths = ["/checkout", "/admin"];
+    const shouldHideNav = hideNavPaths.includes(location.pathname);
+
+    return (
+      <>
+        {/* {!shouldHideNav && <Navbar />} */}
+        <Navbar />
+        <ScrollToTop />
+
+        <main>
+          {/* <div style={shouldHideNav ? {} : { marginTop  : "200px" }}> */}
+          <div style={{ marginTop: "200px" }}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+
+              <Route path="/shoppingCart" element={<ShoppingCart />} />
+
+              <Route path="/checkout" element={<CheckOut />} />
+
+              <Route path="/register" element={<Register />} />
+              <Route path="/signin" element={<SignIn />} />
+
+              <Route path="/shop" element={<Shop />} />
+
+              <Route path="/admin" element={<Admin />} />
+
+              <Route path="/dashboard" element={<Dashboard />} />
+              
+              <Route path="/aboutUs" element={<AboutUs />} />
+              <Route path="/contactUs" element={<Contact />} />
+            </Routes>
+          </div>
+        </main>
+
+        {/* {!shouldHideNav && <Footer />} */}
+        <Footer />
+      </>
+    );
+  }
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <Navbar />
-      {/* <BreadcrumbsNavigation /> */}
-      <main>
-        <div style={{ marginTop: 200 }}>
-          <Routes>
-            <Route path="/" element={<Home />}></Route>
-
-            <Route path="/shoppingCart" element={<ShoppingCart />}></Route>
-            <Route path="/checkout" element={<CheckOut />}></Route>
-
-            <Route path="/register" element={<Register />}></Route>
-            <Route path="/signin" element={<SignIn />}></Route>
-
-            <Route path="/shop" element={<Shop />}></Route>
-
-            <Route path="/admin" element={<Admin />}></Route>
-
-            <Route path="/dashboard" element={<Dashboard />}></Route>
-
-            <Route path="/aboutUs" element={<AboutUs />}></Route>
-
-            <Route path="/contactUs" element={<Contact />}></Route>
-          </Routes>
-        </div>
-      </main>
-      <Footer />
+      <AppLayout />
     </BrowserRouter>
   );
 }

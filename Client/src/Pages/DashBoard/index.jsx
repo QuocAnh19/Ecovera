@@ -13,47 +13,48 @@ export default function Dashboard() {
 
   const [activeSection, setActiveSection] = useState("dashboard");
 
+  // Profile states
   const [isProfileEditing, setIsProfileEditing] = useState(false);
-  const [isAddressEditing, setIsAddressEditing] = useState(false);
+  const [profileName, setProfileName] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
 
-  const [name, setName] = useState("Guest User");
-  const [image, setImage] = useState(null);
+  // Billing address states
+  const [isAddressEditing, setIsAddressEditing] = useState(false);
+  const [billingName, setBillingName] = useState("");
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
+  const [preview, setPreview] = useState(null);
+
+  // Load user from location or localStorage
+  useEffect(() => {
+    if (location.state?.user) {
+      setUser(location.state.user);
+    } else {
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) setUser(JSON.parse(savedUser));
+    }
+  }, [location.state]);
+
+  // Sync user data into states
   useEffect(() => {
     if (user) {
-      setName(user.name || "Guest User");
-      setImage(user.image || null);
+      setProfileName(user.name || "");
+      setProfileImage(user.image || null);
+
+      setBillingName(user.name || "");
       setAddress(user.address || "");
       setEmail(user.email || "");
       setPhone(user.phone || "");
     }
   }, [user]);
 
-  const [preview, setPreview] = useState(null);
-
-  useEffect(() => {
-    if (location.state?.user) {
-      setUser(location.state.user);
-    } else {
-      const savedUser = localStorage.getItem("user");
-      if (savedUser) {
-        try {
-          setUser(JSON.parse(savedUser));
-        } catch {
-          setUser(null);
-        }
-      }
-    }
-  }, [location.state]);
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setPreview(URL.createObjectURL(file));
-      setImage(file);
+      setProfileImage(file);
     }
   };
 
@@ -66,13 +67,20 @@ export default function Dashboard() {
     const formData = new FormData();
     formData.append("user_id", user.user_id);
 
-    formData.append("name", name);
-    formData.append("address", address);
-    formData.append("email", email);
-    formData.append("phone", phone);
+    // Update profile
+    if (section === "profile") {
+      formData.append("name", profileName);
+      if (profileImage instanceof File) {
+        formData.append("image", profileImage);
+      }
+    }
 
-    if (image instanceof File) {
-      formData.append("image", image);
+    // Update billing/address
+    if (section === "address") {
+      formData.append("name", billingName);
+      formData.append("address", address);
+      formData.append("email", email);
+      formData.append("phone", phone);
     }
 
     try {
@@ -85,19 +93,18 @@ export default function Dashboard() {
       if (data.success) {
         alert("✅ Cập nhật thành công!");
 
-        if (section === "profile") {
-          setIsProfileEditing(false);
-        } else if (section === "address") {
-          setIsAddressEditing(false);
-        }
+        if (section === "profile") setIsProfileEditing(false);
+        if (section === "address") setIsAddressEditing(false);
 
         if (data.user) {
           setUser(data.user);
-          setName(data.user.name);
-          setImage(data.user.image);
+
+          setProfileName(data.user.name);
+          setBillingName(data.user.name);
           setAddress(data.user.address);
           setEmail(data.user.email);
           setPhone(data.user.phone);
+
           setPreview(null);
           localStorage.setItem("user", JSON.stringify(data.user));
         }
@@ -108,6 +115,15 @@ export default function Dashboard() {
     }
   };
 
+  // Determine profile image src
+  const profileImgSrc = preview
+    ? preview
+    : user?.image_url
+    ? `http://localhost:5000${user.image_url}`
+    : user?.image
+    ? `http://localhost:5000/uploads/Dashboard/${user.image}`
+    : "http://localhost:5000/uploads/Dashboard/default-avatar.png";
+
   return (
     <div className={style.container}>
       <div className={style.left}>
@@ -116,24 +132,19 @@ export default function Dashboard() {
           active={activeSection}
         />
       </div>
+
       {activeSection === "dashboard" && (
         <div className={style.rightDashboard} id="dashboard">
           <div className={style.row}>
+            {/* PROFILE SECTION */}
             <div className={style.profile}>
               <div className={style.img}>
                 <img
-                  src={
-                    preview
-                      ? preview
-                      : user?.image_url
-                      ? `http://localhost:5000${user.image_url}`
-                      : user?.image
-                      ? `http://localhost:5000/uploads/Dashboard/${user.image}`
-                      : "http://localhost:5000/uploads/Dashboard/default-avatar.png"
-                  }
+                  src={profileImgSrc}
                   alt="profile"
                   className={style.avatar}
                 />
+
                 {isProfileEditing && (
                   <input
                     type="file"
@@ -143,17 +154,18 @@ export default function Dashboard() {
                   />
                 )}
               </div>
+
               <div className={style.info}>
                 <div className={style.name}>
                   {isProfileEditing ? (
                     <input
                       type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      value={profileName}
+                      onChange={(e) => setProfileName(e.target.value)}
                       className={style.inputEdit}
                     />
                   ) : (
-                    user?.name || name || "Guest User"
+                    profileName
                   )}
                 </div>
 
@@ -161,6 +173,7 @@ export default function Dashboard() {
                   <p>{user?.role || "Customer"}</p>
                 </div>
               </div>
+
               {!isProfileEditing ? (
                 <div
                   className={style.edit}
@@ -177,20 +190,24 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
+
+            {/* BILLING ADDRESS */}
             <div className={style.bg}>
               <div className={style.title}>BILLING ADDRESS</div>
+
               <div className={style.name}>
                 {isAddressEditing ? (
                   <input
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={billingName}
+                    onChange={(e) => setBillingName(e.target.value)}
                     className={style.inputEdit}
                   />
                 ) : (
-                  name || "Guest User"
+                  billingName
                 )}
               </div>
+
               <p>
                 {isAddressEditing ? (
                   <input
@@ -203,6 +220,7 @@ export default function Dashboard() {
                   address || "Chưa có địa chỉ"
                 )}
               </p>
+
               <div className={style.email}>
                 {isAddressEditing ? (
                   <input
@@ -215,6 +233,7 @@ export default function Dashboard() {
                   email || "Chưa có email"
                 )}
               </div>
+
               <div className={style.phone}>
                 {isAddressEditing ? (
                   <input
@@ -227,6 +246,7 @@ export default function Dashboard() {
                   phone || "Chưa có số điện thoại"
                 )}
               </div>
+
               {!isAddressEditing ? (
                 <div
                   className={style.edit}
@@ -244,6 +264,8 @@ export default function Dashboard() {
               )}
             </div>
           </div>
+
+          {/* ORDER HISTORY SECTION */}
           <div className={style.orderHistory}>
             <div className={style.heading}>
               Recent Order History
@@ -252,6 +274,7 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+
       {activeSection === "orderHistory" && (
         <div className={style.rightOrderHistory} id="orderHistory">
           <div className={style.orderHistory}>
@@ -259,6 +282,7 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+
       {activeSection === "setting" && (
         <div className={style.rightSetting} id="setting">
           <div className={style.setting}>
@@ -266,6 +290,7 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+
       {activeSection === "logOut" && (
         <div className={style.rightLogOut} id="logOut">
           <img src={ImgIllustration} alt="" />

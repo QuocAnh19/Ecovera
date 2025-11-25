@@ -156,7 +156,7 @@ router.post("/add", upload.single("image"), async (req, res) => {
     let tags = [];
     if (req.body.tags) {
       try {
-        tags = JSON.parse(req.body.tags); // client gửi JSON array
+        tags = JSON.parse(req.body.tags);
       } catch (err) {
         tags = [];
       }

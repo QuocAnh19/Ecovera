@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import style from "./Shop.module.scss";
 
@@ -18,14 +18,15 @@ export default function Shop() {
         />
       </div>
       <div className={style.right}>
-        {activeSection === "Vegetables" && (
-          <div className={style.vegetables} id="Vegetables">
-            <Vegetables />
-          </div>
-        )}
         {activeSection === "Fruits" && (
           <div className={style.vegetables} id="Fruits">
             <FreshFruit />
+          </div>
+        )}
+
+        {activeSection === "Vegetables" && (
+          <div className={style.vegetables} id="Vegetables">
+            <Vegetables />
           </div>
         )}
       </div>

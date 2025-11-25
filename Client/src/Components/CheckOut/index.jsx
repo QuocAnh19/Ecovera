@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import style from "./CheckOut.module.scss";
@@ -8,27 +8,49 @@ import Button from "../Button";
 export default function CheckOut() {
   const { cartItems, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
+
+  const [user, setUser] = useState(null);
+  const [editingAddress, setEditingAddress] = useState(false);
+  const [tempForm, setTempForm] = useState({});
+  const [paymentMethod, setPaymentMethod] = useState("cod");
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
+  const formState = {
+    name: "",
     company: "",
     address: "",
-    country: "Việt Nam",
-    state: "Đà Nẵng",
     email: "",
     phone: "",
     notes: "",
-    paymentMethod: "cod",
-  });
+  };
+
+  const [form, setForm] = useState(formState);
+  const [defaultAddress, setDefaultAddress] = useState({});
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm({
-      ...form,
+    const updater = editingAddress ? setTempForm : setForm;
+
+    updater((prevForm) => ({
+      ...prevForm,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
+  };
+
+  // const handleSubmit = () => {
+  //   setForm((prev) => { prev, paymentMethod });
+
+  // }
+
+  const handleChangePaymentMethod = (e) => {
+    const { value } = e.target;
+    console.log(form, value);
+    console.log(JSON.stringify(defaultAddress) !== JSON.stringify(form));
+    setPaymentMethod(value);
+  };
+
+  const handleUseDefaultAddress = () => {
+    setForm(defaultAddress);
   };
 
   const total = cartItems.reduce((acc, item) => {
@@ -48,14 +70,14 @@ export default function CheckOut() {
     try {
       const orderData = {
         customer: {
-          name: `${form.firstName} ${form.lastName}`,
+          name: form.name,
           email: form.email,
           phone: form.phone,
           address: form.address,
         },
         cart: cartItems,
         total,
-        payment_method: form.paymentMethod,
+        payment_method: paymentMethod,
       };
 
       const token = localStorage.getItem("token");
@@ -107,119 +129,224 @@ export default function CheckOut() {
     }
   };
 
+  const handleOpenEditForm = () => {
+    setTempForm({ ...formState });
+    setEditingAddress(true);
+  };
+
+  const handleCancelEditForm = () => {
+    // 💡 KHÔNG LÀM GÌ với FORM chính. Chỉ đóng form và xóa TEMPFORM
+    setEditingAddress(false);
+    setTempForm({});
+  };
+
+  const handleSaveEditForm = () => {
+    const requiredFields = ["name", "address", "email", "phone"];
+
+    for (const field of requiredFields) {
+      if (!tempForm[field] || String(tempForm[field]).trim() === "") {
+        alert(
+          `Please fill in complete information: Field [ ${field} ] is required.`
+        );
+        return;
+      }
+    }
+
+    setForm(tempForm);
+    setEditingAddress(false);
+    setTempForm({});
+  };
+
+  // Load user từ localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("user");
+    if (saved) {
+      const u = JSON.parse(saved);
+      setUser(u);
+
+      const initialUserData = {
+        name: u.name || "",
+        address: u.address || "",
+        email: u.email || "",
+        phone: u.phone || "",
+        company: u.company || "",
+        notes: u.notes || "",
+        paymentMethod: u.paymentMethod || "cod",
+      };
+      setDefaultAddress(initialUserData);
+      setForm(initialUserData);
+    } else {
+      setDefaultAddress(formState);
+      setForm(formState);
+    }
+  }, []);
+
   return (
     <div className={style.checkoutContainer}>
-      <form
-        className={style.billingForm}
-        onSubmit={handlePlaceOrder}
-        method="POST"
-      >
-        <h2>Billing Information</h2>
-        <div className={style.row}>
-          <div className={style.formGroup}>
-            <label>First name</label>
-            <input
-              type="text"
-              placeholder="Your first name"
-              name="firstName"
-              value={form.firstName}
-              onChange={handleChange}
-              className={style.inputCheckout}
-              required
-            />
-          </div>
+      <div className={style.left}>
+        <form
+          className={style.billingForm}
+          onSubmit={handlePlaceOrder}
+          method="POST"
+        >
+          <h2>Billing Information</h2>
+          {!editingAddress && user && (
+            <div className={style.addressContainer}>
+              {JSON.stringify(defaultAddress) !== JSON.stringify(form) && (
+                <div
+                  className={`${style.savedAddressBox} ${style.fadedAddress}`}
+                >
+                  <div className={style.addressHeader}>
+                    <strong>Địa chỉ Mặc định</strong>
+                    <span className={style.defaultTag}>MẶC ĐỊNH</span>
+                  </div>
+                  <div className={style.rowAddress}>
+                    <div className={style.namePhone}>
+                      <strong>{defaultAddress.name}</strong>
+                      {defaultAddress.phone
+                        ? `(+84)${defaultAddress.phone}`
+                        : ""}
+                    </div>
+                    <div className={style.addressDetail}>
+                      {defaultAddress.address || "Chưa có địa chỉ"}
+                    </div>
+                  </div>
+                  <div className={style.addressActions}>
+                    <button
+                      type="button"
+                      className={style.changeBtn}
+                      onClick={handleUseDefaultAddress}
+                    >
+                      Chọn địa chỉ mặc định
+                    </button>
+                  </div>
+                </div>
+              )}
+              <div className={style.savedAddressBox}>
+                <div className={style.addressHeader}>
+                  <strong>Địa chỉ Giao hàng hiện tại a</strong>
+                  {JSON.stringify(defaultAddress) === JSON.stringify(form) && (
+                    <span className={style.defaultTag}>HIỆN TẠI</span>
+                  )}
+                </div>
+                <div className={style.rowAddress}>
+                  <div className={style.namePhone}>
+                    <strong>{form.name}</strong>
+                    {form.phone ? `(+84)${form.phone}` : ""}
+                  </div>
 
-          <div className={style.formGroup}>
-            <label>Last name</label>
-            <input
-              type="text"
-              placeholder="Your last name"
-              name="lastName"
-              value={form.lastName}
-              onChange={handleChange}
-              className={style.inputCheckout}
-              required
-            />
-          </div>
+                  <div className={style.addressDetail}>
+                    {form.address || "Chưa có địa chỉ"}
+                  </div>
 
-          <div className={style.formGroup}>
-            <label>
-              Company Name <span>(optional)</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Company name"
-              name="company"
-              value={form.company}
-              onChange={handleChange}
-              className={style.inputCheckout}
-            />
-          </div>
-        </div>
+                  <div className={style.addressActions}>
+                    <button
+                      type="button"
+                      className={style.changeBtn}
+                      onClick={handleOpenEditForm}
+                    >
+                      Thay đổi
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {editingAddress && (
+            <div className={style.editForm}>
+              <div className={style.row}>
+                <div className={style.formGroup}>
+                  <label>Name</label>
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    name="name"
+                    value={tempForm.name || ""}
+                    onChange={handleChange}
+                    className={style.inputCheckout}
+                    required
+                  />
+                </div>
 
-        <div className={style.row}>
-          <div className={style.formGroup}>
-            <label>Street Address</label>
-            <input
-              type="text"
-              placeholder="Your address"
-              name="address"
-              value={form.address}
-              onChange={handleChange}
-              className={style.inputCheckout}
-              required
-            />
-          </div>
-        </div>
+                <div className={style.formGroup}>
+                  <label>
+                    Company Name <span>(optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Company name"
+                    name="company"
+                    value={tempForm.company || ""}
+                    onChange={handleChange}
+                    className={style.inputCheckout}
+                  />
+                </div>
+              </div>
 
-        <div className={style.row}>
-          <div className={style.formGroup}>
-            <label>Country / Region</label>
-            <select name="country" value={form.country} onChange={handleChange}>
-              <option value="">Vietnam</option>
-              <option value="usa">USA</option>
-            </select>
-          </div>
+              <div className={style.row}>
+                <div className={style.formGroup}>
+                  <label>Street Address</label>
+                  <input
+                    type="text"
+                    placeholder="Your address"
+                    name="address"
+                    value={tempForm.address || ""}
+                    onChange={handleChange}
+                    className={style.inputCheckout}
+                    required
+                  />
+                </div>
+              </div>
 
-          <div className={style.formGroup}>
-            <label>States</label>
-            <select name="state" value={form.state} onChange={handleChange}>
-              <option value="">State 1</option>
-              <option value="state2">State 2</option>
-            </select>
-          </div>
-        </div>
+              <div className={style.row}>
+                <div className={style.formGroup}>
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    placeholder="Email Address"
+                    name="email"
+                    value={tempForm.email || ""}
+                    onChange={handleChange}
+                    className={style.inputCheckout}
+                    required
+                  />
+                </div>
 
-        <div className={style.row}>
-          <div className={style.formGroup}>
-            <label>Email</label>
-            <input
-              type="email"
-              placeholder="Email Address"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              className={style.inputCheckout}
-              required
-            />
-          </div>
+                <div className={style.formGroup}>
+                  <label>Phone</label>
+                  <input
+                    type="tel"
+                    placeholder="Phone number"
+                    name="phone"
+                    value={tempForm.phone || ""}
+                    onChange={handleChange}
+                    className={style.inputCheckout}
+                    required
+                  />
+                </div>
+              </div>
 
-          <div className={style.formGroup}>
-            <label>Phone</label>
-            <input
-              type="tel"
-              placeholder="Phone number"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              className={style.inputCheckout}
-              required
-            />
-          </div>
-        </div>
-
+              <div className={style.btnRow}>
+                <Button
+                  ghost
+                  className={style.cancelAddressBtn}
+                  onClick={handleCancelEditForm}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  fill
+                  className={style.saveAddressBtn}
+                  onClick={handleSaveEditForm}
+                >
+                  Save
+                </Button>
+              </div>
+            </div>
+          )}
+        </form>
         <hr />
-
+        <br />
         <div className={style.additionalInfo}>
           <h3>Additional Info</h3>
           <div className={style.noteBox}>
@@ -232,7 +359,7 @@ export default function CheckOut() {
             />
           </div>
         </div>
-      </form>
+      </div>
 
       {/* Order Summary */}
       <div className={style.orderSummary}>
@@ -286,8 +413,8 @@ export default function CheckOut() {
                 type="radio"
                 name="paymentMethod"
                 value="cod"
-                checked={form.paymentMethod === "cod"}
-                onChange={handleChange}
+                checked={paymentMethod === "cod"}
+                onChange={handleChangePaymentMethod}
               />
               Cash on Delivery
             </label>
@@ -296,8 +423,8 @@ export default function CheckOut() {
                 type="radio"
                 name="paymentMethod"
                 value="momo"
-                checked={form.paymentMethod === "momo"}
-                onChange={handleChange}
+                checked={paymentMethod === "momo"}
+                onChange={handleChangePaymentMethod}
               />
               Momo
             </label>
@@ -306,8 +433,8 @@ export default function CheckOut() {
                 type="radio"
                 name="paymentMethod"
                 value="amazon"
-                checked={form.paymentMethod === "amazon"}
-                onChange={handleChange}
+                checked={paymentMethod === "amazon"}
+                onChange={handleChangePaymentMethod}
               />
               Amazon Pay
             </label>
