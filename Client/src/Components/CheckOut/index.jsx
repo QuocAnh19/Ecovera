@@ -212,19 +212,19 @@ export default function CheckOut() {
                     </div>
                   </div>
                   <div className={style.addressActions}>
-                    <button
-                      type="button"
+                    <Button
+                      ghost
                       className={style.changeBtn}
                       onClick={handleUseDefaultAddress}
                     >
                       Chọn địa chỉ mặc định
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
               <div className={style.savedAddressBox}>
                 <div className={style.addressHeader}>
-                  <strong>Địa chỉ Giao hàng hiện tại a</strong>
+                  <strong>Địa chỉ Giao hàng hiện tại</strong>
                   {JSON.stringify(defaultAddress) === JSON.stringify(form) && (
                     <span className={style.defaultTag}>HIỆN TẠI</span>
                   )}
@@ -240,13 +240,13 @@ export default function CheckOut() {
                   </div>
 
                   <div className={style.addressActions}>
-                    <button
-                      type="button"
+                    <Button
+                      ghost
                       className={style.changeBtn}
                       onClick={handleOpenEditForm}
                     >
-                      Thay đổi
-                    </button>
+                      Change
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -326,19 +326,11 @@ export default function CheckOut() {
                 </div>
               </div>
 
-              <div className={style.btnRow}>
-                <Button
-                  ghost
-                  className={style.cancelAddressBtn}
-                  onClick={handleCancelEditForm}
-                >
+              <div className={style.row}>
+                <Button ghost onClick={handleCancelEditForm}>
                   Cancel
                 </Button>
-                <Button
-                  fill
-                  className={style.saveAddressBtn}
-                  onClick={handleSaveEditForm}
-                >
+                <Button fill onClick={handleSaveEditForm}>
                   Save
                 </Button>
               </div>

@@ -11,37 +11,9 @@
         display: flex;
         flex-direction: column;
 
-        .addressContainer {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
 
-        .fadedAddress {
-            opacity: 0.6;
-            transition: opacity 0.3s ease;
-            border: 1px dashed #ccc;
-            padding: 10px;
-        }
 
-        .savedAddressBox {
-            border: 1px solid var(--border-color);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
 
-        .addressHeader {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .rowAddress {
-            display: flex;
-            flex-direction: column;
-        }
 
         .billingForm {
             flex: 2;
@@ -51,120 +23,142 @@
             height: 710px;
             gap: 1rem;
 
-            .savedAddressBox {
-                padding: 20px;
-                border: 1px solid #eee;
-                border-radius: 8px;
-                background: $White-color;
-            }
-
-            .addressDetail {
-                margin: 10px 0;
-            }
-
-            .addressActions {
+            .addressContainer {
                 display: flex;
-                gap: 10px;
-                align-items: center;
-            }
+                flex-direction: column;
+                gap: 15px;
 
-            .defaultTag {
-                padding: 2px 8px;
-                border: 1px solid $Primary-color;
-                color: $Primary-color;
-                font-size: 12px;
-                border-radius: 4px;
-            }
-
-            .changeBtn {
-                background: none;
-                border: none;
-                color: $Hard-Primary-color;
-                cursor: pointer;
-                font-size: 14px;
-            }
-
-            .editFormBox {
-                margin-top: 20px;
-            }
-
-
-            .row {
-                display: flex;
-                flex-direction: row;
-                gap: 1rem;
-
-                .inputCheckout {
-                    flex: 1;
-                    padding: 14px;
-                    border: 1px solid $White-color;
-                    width: 100%;
-                    border-radius: 6px;
-                    font-size: $font-size-tiny;
-                    font-weight: $font-weight-regular;
-                    color: $Grey-400;
-
-                    &:focus {
-                        outline: none;
-                        border-color: $Primary-color;
-                        box-shadow: 0 0 4px rgba(0, 178, 7, 0.3);
-                    }
-
-                }
-
-
-                .formGroup {
-                    flex: 1;
+                .savedAddressBox {
                     display: flex;
                     flex-direction: column;
 
-                    .inputCheckout,
-                    select {
-                        flex: 1;
-                        padding: 14px;
-                        border: 1px solid #ccc;
-                        width: 100%;
-                        border-radius: 6px;
-                        font-size: $font-size-tiny;
-                        font-weight: $font-weight-regular;
-                        color: $Grey-400;
-                        margin-top: 8px;
+                    justify-content: space-between;
+                    gap: 8px;
+                    padding: 20px;
+                    border: 1px solid #eee;
+                    border-radius: 10px;
+                    background: $White-color;
 
-                        &:focus {
-                            outline: none;
-                            border-color: $Primary-color;
-                            box-shadow: 0 0 4px rgba(0, 178, 7, 0.3);
+                    .addressHeader {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 10px;
+
+                        .defaultTag {
+                            padding: 2px 8px;
+                            border: 1px solid $Primary-color;
+                            color: $Primary-color;
+                            font-size: 12px;
+                            border-radius: 4px;
+                        }
+
+
+
+                    }
+
+                    .rowAddress {
+                        display: flex;
+                        gap: 10px;
+                        flex-direction: column;
+                        color: $Grey-600;
+
+                        .namePhone {}
+
+                        .addressDetail {
+                            margin: 10px 0;
+                        }
+
+                        .addressActions {
+                            display: flex;
+
+                            .changeBtn {}
                         }
                     }
                 }
 
-
-            }
-
-            .additionalInfo {
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-                margin-top: 1rem;
-
-                textarea {
-                    width: 100%;
-                    min-height: 80px;
-                    padding: 0.7rem;
-                    border: 1px solid #ccc;
-                    border-radius: 6px;
-                    font-size: 0.95rem;
-                    resize: vertical;
-                    margin-top: 8px;
-
-                    &:focus {
-                        outline: none;
-                        border-color: $Primary-color;
-                        box-shadow: 0 0 4px rgba(0, 178, 7, 0.3);
-                    }
+                .fadedAddress {
+                    opacity: 0.6;
+                    transition: opacity 0.3s ease;
+                    border: 1px dashed #ccc;
+                    padding: 10px;
                 }
             }
 
+            .editForm {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+
+                .row {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 1rem;
+
+
+
+
+                    .formGroup {
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+
+                        .inputCheckout,
+                        select {
+                            flex: 1;
+                            padding: 14px;
+                            border: 1px solid #ccc;
+                            width: 100%;
+                            border-radius: 6px;
+                            font-size: $font-size-tiny;
+                            font-weight: $font-weight-regular;
+                            color: $Grey-400;
+                            margin-top: 8px;
+
+                            &:focus {
+                                outline: none;
+                                border-color: $Primary-color;
+                                box-shadow: 0 0 4px rgba(0, 178, 7, 0.3);
+                            }
+                        }
+                    }
+
+
+                }
+
+                .btnRow {}
+
+            }
+
+
+
+
+        }
+
+        .additionalInfo {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 2rem;
+
+            textarea {
+                width: 100%;
+                min-height: 80px;
+                padding: 0.7rem;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                resize: vertical;
+                margin-top: 8px;
+
+                &:focus {
+                    outline: none;
+                    border-color: $Primary-color;
+                    box-shadow: 0 0 4px rgba(0, 178, 7, 0.3);
+                }
+            }
         }
     }
 
