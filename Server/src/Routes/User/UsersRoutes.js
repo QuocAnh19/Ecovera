@@ -30,35 +30,57 @@ const upload = multer({ storage });
 // API cập nhật thông tin người dùng
 router.post("/updateProfile", upload.single("image"), async (req, res) => {
   try {
-    const { user_id, name, address, email, phone } = req.body;
+    const { user_id } = req.body;
     const image = req.file ? req.file.filename : null;
 
-    if (!user_id || !name) {
+    if (!user_id) {
       return res
         .status(400)
-        .json({ success: false, message: "Missing user_id or name" });
+        .json({ success: false, message: "Missing user_id" });
     }
 
-    let sql = "UPDATE Users SET name = ?, address = ?, email = ?, phone = ?";
-    const params = [name, address, email, phone];
+    const updateFields = {};
+    const allowedFields = ["name", "address", "email", "phone"];
+
+    // Chỉ thêm các trường có giá trị vào updateFields
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        updateFields[field] = req.body[field];
+      }
+    }
 
     if (image) {
-      sql += ", image = ?";
-      params.push(image);
+      updateFields.image = image;
     }
 
-    sql += " WHERE user_id = ?";
-    params.push(user_id);
+    // Nếu không có trường nào để cập nhật (trừ user_id)
+    if (Object.keys(updateFields).length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No data to update" });
+    }
 
+    // Xây dựng SQL linh hoạt
+    const fieldAssignments = Object.keys(updateFields).map(
+      (field) => `${field} = ?`
+    );
+    const sql = `UPDATE Users SET ${fieldAssignments.join(
+      ", "
+    )} WHERE user_id = ?`;
+
+    const params = [...Object.values(updateFields), user_id];
+
+    // Thực thi lệnh cập nhật
     await dataBase.promise().query(sql, params);
 
-    // Query lại user vừa update
+    // ... (Phần Query lại user và trả về response - KHÔNG THAY ĐỔI)
     const [rows] = await dataBase
       .promise()
       .query(
         "SELECT *, CONCAT('/uploads/Dashboard/', image) AS image_url FROM Users WHERE user_id = ?",
         [user_id]
       );
+    // ... (Phần trả về updatedUser)
 
     if (rows.length === 0) {
       return res
@@ -75,8 +97,8 @@ router.post("/updateProfile", upload.single("image"), async (req, res) => {
     });
   } catch (err) {
     console.error("Error updating profile:", err);
+    // Bắt lỗi 500 nếu có bất kỳ vấn đề nào khác (như DB NOT NULL,...)
     res.status(500).json({ success: false, message: "Update failed" });
   }
 });
-
 export default router;

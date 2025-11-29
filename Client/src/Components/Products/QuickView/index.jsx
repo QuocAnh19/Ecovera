@@ -24,7 +24,7 @@ export default function QuickView({
   const [quantity, setQuantity] = useState(1);
 
   const handleAdd = () => {
-    window.scrollTo({top: 200, behavior: "smooth"});
+    // window.scrollTo({top: 200, behavior: "smooth"});
     const product = { id, name, image, salePrice, originalPrice };
     console.log("Adding product:", product);
     addToCart(product, quantity);

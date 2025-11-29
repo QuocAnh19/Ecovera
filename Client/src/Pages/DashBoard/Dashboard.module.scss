@@ -108,6 +108,11 @@
                     line-height: 150%;
                 }
 
+                .row{
+                    display: flex;
+                    flex-direction: row;
+                }
+
                 .email,
                 .phone {
                     font-size: $font-size-small;
@@ -120,6 +125,12 @@
                     font-weight: $font-weight-medium;
                     color: $Primary-color;
                     cursor: pointer;
+                }
+
+                .btn{
+                    display: flex;
+                    flex-direction: row;
+                    gap: 2rem;
                 }
 
                 .inputEdit {

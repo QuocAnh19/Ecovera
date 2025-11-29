@@ -184,6 +184,9 @@ export default function CheckOut() {
   return (
     <div className={style.checkoutContainer}>
       <div className={style.left}>
+        <Button ghost className={style.btnReturn} onClick={() => navigate(-1)}>
+          Return
+        </Button>
         <form
           className={style.billingForm}
           onSubmit={handlePlaceOrder}
@@ -270,7 +273,7 @@ export default function CheckOut() {
 
                 <div className={style.formGroup}>
                   <label>
-                    Company Name <span>(optional)</span>
+                    Company Name  (optional)
                   </label>
                   <input
                     type="text"
@@ -285,16 +288,37 @@ export default function CheckOut() {
 
               <div className={style.row}>
                 <div className={style.formGroup}>
-                  <label>Street Address</label>
-                  <input
+                  <label>Address</label>
+                  {/* <input
                     type="text"
-                    placeholder="Your address"
+                    placeholder="Your provinces"
                     name="address"
                     value={tempForm.address || ""}
                     onChange={handleChange}
                     className={style.inputCheckout}
                     required
-                  />
+                  /> */}
+
+                  <div className={style.address}>
+                    <input
+                      type="text"
+                      placeholder="Your provinces"
+                      name="provinces"
+                      value={tempForm.provinceAddress || ""}
+                      onChange={handleChange}
+                      className={style.inputCheckout}
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="Your communes"
+                      name="communes"
+                      value={tempForm.communesAddress || ""}
+                      onChange={handleChange}
+                      className={style.inputCheckout}
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 

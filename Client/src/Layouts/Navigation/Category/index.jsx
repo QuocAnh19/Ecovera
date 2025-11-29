@@ -7,11 +7,11 @@ export default function CategoryNavigation({ onSelect, active: propActive }) {
   const categories = [
     { id: "Fruits", name: "Fresh Fruit" },
     { id: "Vegetables", name: "Vegetables" },
-    { id: "cooking", name: "Cooking" },
-    { id: "snacks", name: "Snacks" },
-    { id: "beverages", name: "Beverages" },
-    { id: "beauty&Health", name: "Beauty & Health" },
-    { id: "bread&Bakery", name: "Bread & Bakery" },
+    { id: "Cooking", name: "Cooking" },
+    { id: "Snacks", name: "Snacks" },
+    { id: "Beverages", name: "Beverages" },
+    { id: "Beauty&Health", name: "Beauty & Health" },
+    { id: "Bread&Bakery", name: "Bread & Bakery" },
   ];
 
   const [open, setOpen] = useState(true);

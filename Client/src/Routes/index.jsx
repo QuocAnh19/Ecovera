@@ -43,9 +43,8 @@ export default function AppRoutes() {
             <Routes>
               <Route path="/" element={<Home />} />
 
-              <Route path="/shoppingCart" element={<ShoppingCart />} />
-
-              <Route path="/checkout" element={<CheckOut />} />
+              <Route path="/shoppingCart" element={<ShoppingCart />}></Route>
+              <Route path="checkout" element={<CheckOut />} />
 
               <Route path="/register" element={<Register />} />
               <Route path="/signin" element={<SignIn />} />
@@ -55,7 +54,7 @@ export default function AppRoutes() {
               <Route path="/admin" element={<Admin />} />
 
               <Route path="/dashboard" element={<Dashboard />} />
-              
+
               <Route path="/aboutUs" element={<AboutUs />} />
               <Route path="/contactUs" element={<Contact />} />
             </Routes>

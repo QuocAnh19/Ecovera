@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import style from "./Dashboard.module.scss";
 
@@ -10,6 +10,8 @@ import Button from "../../Components/Button";
 export default function Dashboard() {
   const location = useLocation();
   const [user, setUser] = useState(null);
+
+  const navigate = useNavigate();
 
   const [activeSection, setActiveSection] = useState("dashboard");
 
@@ -89,7 +91,16 @@ export default function Dashboard() {
         body: formData,
       });
 
+      if (!res.ok) {
+        // Nếu status là 4xx hoặc 5xx, tạo lỗi và nhảy sang catch
+        const errorText = await res.text(); // Đọc phản hồi dưới dạng văn bản
+        throw new Error(`Lỗi HTTP ${res.status}: ${errorText}`);
+      }
+
       const data = await res.json();
+
+      console.log("Phản hồi từ Server:", data);
+
       if (data.success) {
         alert("✅ Cập nhật thành công!");
 
@@ -110,8 +121,10 @@ export default function Dashboard() {
         }
       }
     } catch (err) {
-      console.error(err);
-      alert("Đã có lỗi khi lưu.");
+      console.error("Lỗi chi tiết từ Server:", err);
+      alert(
+        "🔴 Lỗi! Không thể cập nhật hồ sơ. Vui lòng thử lại sau hoặc liên hệ hỗ trợ."
+      );
     }
   };
 
@@ -196,55 +209,69 @@ export default function Dashboard() {
               <div className={style.title}>BILLING ADDRESS</div>
 
               <div className={style.name}>
-                {isAddressEditing ? (
-                  <input
-                    type="text"
-                    value={billingName}
-                    onChange={(e) => setBillingName(e.target.value)}
-                    className={style.inputEdit}
-                  />
-                ) : (
-                  billingName
-                )}
+                <div className={style.row}>
+                  <label>Name: </label>
+                  {isAddressEditing ? (
+                    <input
+                      type="text"
+                      value={billingName}
+                      onChange={(e) => setBillingName(e.target.value)}
+                      className={style.inputEdit}
+                    />
+                  ) : (
+                    billingName
+                  )}
+                </div>
               </div>
 
               <p>
-                {isAddressEditing ? (
-                  <input
-                    type="text"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    className={style.inputEdit}
-                  />
-                ) : (
-                  address || "Chưa có địa chỉ"
-                )}
+                <div className={style.row}>
+                  <label>Address:</label>
+                  {isAddressEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        className={style.inputEdit}
+                      />
+                    </>
+                  ) : (
+                    address || "Chưa có địa chỉ"
+                  )}
+                </div>
               </p>
 
               <div className={style.email}>
-                {isAddressEditing ? (
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={style.inputEdit}
-                  />
-                ) : (
-                  email || "Chưa có email"
-                )}
+                <div className={style.row}>
+                  <label>Email: </label>
+                  {isAddressEditing ? (
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className={style.inputEdit}
+                    />
+                  ) : (
+                    email || "Chưa có email"
+                  )}
+                </div>
               </div>
 
               <div className={style.phone}>
-                {isAddressEditing ? (
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className={style.inputEdit}
-                  />
-                ) : (
-                  phone || "Chưa có số điện thoại"
-                )}
+                <div className={style.row}>
+                  <label>Phone: </label>
+                  {isAddressEditing ? (
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className={style.inputEdit}
+                    />
+                  ) : (
+                    phone || "Chưa có số điện thoại"
+                  )}
+                </div>
               </div>
 
               {!isAddressEditing ? (
@@ -255,11 +282,14 @@ export default function Dashboard() {
                   Edit Address
                 </div>
               ) : (
-                <div
-                  className={style.edit}
-                  onClick={() => handleSave("address")}
-                >
-                  Save
+                <div className={style.btn}>
+                  <div
+                    className={style.edit}
+                    onClick={() => handleSave("address")}
+                  >
+                    Save
+                  </div>
+                  <div className={style.edit}>Cancel</div>
                 </div>
               )}
             </div>

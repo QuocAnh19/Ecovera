@@ -94,7 +94,7 @@ export default function Navbar() {
           <div className={style.logo}></div>
           <div className={style.ecovera}>Ecovera</div>
         </div>
-        <div className={style.searchBox}>
+        {/* <div className={style.searchBox}>
           <div className={style.iconSearch}></div>
           <div className={style.search}>
             <input
@@ -104,7 +104,7 @@ export default function Navbar() {
             />
           </div>
           <button className={style.btnSearch}>Search</button>
-        </div>
+        </div> */}
         <CartIcon handleGoToCart={handleGoToCart} />
       </div>
 
