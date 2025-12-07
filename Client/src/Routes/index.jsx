@@ -43,8 +43,8 @@ export default function AppRoutes() {
             <Routes>
               <Route path="/" element={<Home />} />
 
-              <Route path="/shoppingCart" element={<ShoppingCart />}></Route>
-              <Route path="checkout" element={<CheckOut />} />
+              <Route path="/shoppingCart" element={<ShoppingCart />} />
+              <Route path="/shoppingCart/checkout" element={<CheckOut />} />
 
               <Route path="/register" element={<Register />} />
               <Route path="/signin" element={<SignIn />} />

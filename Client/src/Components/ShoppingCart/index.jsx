@@ -13,7 +13,7 @@ export default function ShoppingCart() {
 
   // Tính subtotal và tổng
   const subtotal = cartItems.reduce((sum, item) => {
-    const price = item.salePrice ? item.salePrice : item.originalPrice;
+    const price = Number(item.sale_price ?? item.original_price);
     return sum + price * item.quantity;
   }, 0);
 
@@ -33,7 +33,9 @@ export default function ShoppingCart() {
           </div>
 
           {cartItems.map((item) => {
-            const price = item.salePrice ? item.salePrice : item.originalPrice;
+            const price = item.sale_price
+              ? item.sale_price
+              : item.original_price;
 
             return (
               <div key={item.id} className={style.cartRow}>
@@ -80,7 +82,7 @@ export default function ShoppingCart() {
             fill
             className={`${style.btnSubmit}`}
             // onClick={() => navigate("checkout")}
-            href={"/checkout"}
+            href={"/shoppingCart/checkout"}
             disabled={cartItems.length == 0 ? true : false}
           >
             Proceed to checkout

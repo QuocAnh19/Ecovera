@@ -2,7 +2,7 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import dataBase from "../../Config/dataBase.js";
+import db from "../../Config/dataBase.js";
 
 const router = express.Router();
 
@@ -47,10 +47,11 @@ router.get("/", async (req, res) => {
       FROM Products p
       LEFT JOIN Product_Tags pt ON p.product_id = pt.product_id
       LEFT JOIN Tags t ON pt.tag_id = t.tag_id
+      WHERE p.is_active = 1
       ORDER BY p.name
     `;
 
-    const [rows] = await dataBase.promise().query(sql);
+    const [rows] = await db.query(sql);
 
     const productsMap = new Map();
     rows.forEach((row) => {
@@ -73,10 +74,13 @@ router.get("/", async (req, res) => {
 // ================== API: Get Count by Category ==================
 router.get("/category-count", async (req, res) => {
   try {
-    const [rows] = await dataBase.promise().query(`
-      SELECT c.folder_name AS category, COUNT(p.product_id) AS total
+    const [rows] = await db.query(`
+      SELECT 
+      c.folder_name AS category, 
+      COUNT(p.product_id) AS total
       FROM Categories c
-      LEFT JOIN Products p ON c.category_id = p.category_id
+      LEFT JOIN Products p 
+      ON c.category_id = p.category_id AND p.is_active = 1
       GROUP BY c.category_id, c.folder_name
       ORDER BY c.category_id;
     `);
@@ -107,12 +111,10 @@ router.post("/add", upload.single("image"), async (req, res) => {
       return res.status(400).json({ message: "Quantity không hợp lệ!" });
 
     // Lấy category_id
-    const [cat] = await dataBase
-      .promise()
-      .query(
-        "SELECT category_id, folder_name FROM Categories WHERE folder_name = ?",
-        [category]
-      );
+    const [cat] = await db.query(
+      "SELECT category_id, folder_name FROM Categories WHERE folder_name = ?",
+      [category]
+    );
     if (!cat.length)
       return res.status(400).json({ message: "Category không tồn tại!" });
 
@@ -137,7 +139,7 @@ router.post("/add", upload.single("image"), async (req, res) => {
       : 0;
 
     // Thêm sản phẩm
-    await dataBase.promise().query(
+    await db.query(
       `INSERT INTO Products (product_id, category_id, name, original_price, sale_price, discount_percent, image, quantity)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
@@ -165,11 +167,9 @@ router.post("/add", upload.single("image"), async (req, res) => {
     // Lưu tags vào Product_Tags
     if (Array.isArray(tags) && tags.length > 0) {
       const values = tags.map((tag_id) => [product_id, tag_id]);
-      await dataBase
-        .promise()
-        .query("INSERT INTO Product_Tags (product_id, tag_id) VALUES ?", [
-          values,
-        ]);
+      await db.query("INSERT INTO Product_Tags (product_id, tag_id) VALUES ?", [
+        values,
+      ]);
     }
 
     res.json({
@@ -178,6 +178,52 @@ router.post("/add", upload.single("image"), async (req, res) => {
       imagePath,
       quantity: qty,
       tags,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Lỗi server", error: err.message });
+  }
+});
+
+// GET /api/categories
+router.get("/categories", async (req, res) => {
+  try {
+    const [rows] = await db.query(`
+      SELECT category_id, folder_name 
+      FROM Categories
+      ORDER BY category_id;
+    `);
+
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// DELETE /products/:productId
+router.delete("/:productId", async (req, res) => {
+  const { productId } = req.params;
+
+  try {
+    // Xóa Product_Tags liên quan
+    await db.query("DELETE FROM Product_Tags WHERE product_id = ?", [
+      productId,
+    ]);
+
+    // Ẩn sản phẩm (is_active = 0)
+    const [result] = await db.query(
+      "UPDATE Products SET is_active = 0 WHERE product_id = ?",
+      [productId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Không tìm thấy sản phẩm!" });
+    }
+
+    res.json({
+      message: "Sản phẩm đã bị ẩn và tag liên quan đã xóa",
+      productId,
     });
   } catch (err) {
     console.error(err);

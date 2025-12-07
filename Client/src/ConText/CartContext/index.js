@@ -1,42 +1,78 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
-
 export const useCart = () => useContext(CartContext);
 
-// Provider bọc toàn bộ app
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    // Lưu cart vào localStorage để không bị mất khi reload
     const saved = localStorage.getItem("cartItems");
-    return saved ? JSON.parse(saved) : [];
+    if (!saved) return [];
+    try {
+      return JSON.parse(saved).map((item) => ({
+        ...item,
+        price: Number(item.price) || 0,
+        quantity: Number(item.quantity) || 1,
+      }));
+    } catch {
+      return [];
+    }
   });
 
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product, quantity = 1) => {
-    setCartItems((prevItems) => {
-      const existing = prevItems.find((item) => item.id === product.id);
-      if (existing) {
-        return prevItems.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
+  // Thêm product (hỗ trợ 1 product hoặc mảng)
+  const addToCart = (products) => {
+    const items = Array.isArray(products) ? products : [products];
+
+    setCartItems((prev) => {
+      const newCart = [...prev];
+
+      items.forEach((product) => {
+        // Lấy ID chuẩn từ backend
+        const id = product.product_id || product.id;
+
+        // Lấy giá ưu tiên sale_price, fallback original_price
+        const price = Number(
+          product.sale_price ??
+            product.salePrice ??
+            product.original_price ??
+            product.originalPrice ??
+            0
         );
-      }
-      return [...prevItems, { ...product, quantity }];
+
+        // Quantity mặc định là 1 nếu không có
+        const quantity = Number(product.quantity) || 1;
+
+        // Chuẩn hóa product trước khi push vào cart
+        const normalized = {
+          ...product,
+          id,
+          price,
+          quantity,
+        };
+
+        // Kiểm tra nếu sản phẩm đã có trong giỏ → cộng quantity
+        const index = newCart.findIndex((item) => item.id === id);
+        if (index >= 0) {
+          newCart[index].quantity += quantity;
+        } else {
+          newCart.push(normalized);
+        }
+      });
+
+      return newCart;
     });
   };
 
   const removeFromCart = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
   const updateQuantity = (id, newQty) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
+    setCartItems((prev) =>
+      prev.map((item) =>
         item.id === id ? { ...item, quantity: newQty } : item
       )
     );
@@ -48,7 +84,6 @@ export const CartProvider = ({ children }) => {
   };
 
   const cartCount = cartItems.length;
-
   const cartTotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0

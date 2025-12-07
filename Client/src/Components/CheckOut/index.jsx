@@ -44,24 +44,86 @@ export default function CheckOut() {
 
   const handleChangePaymentMethod = (e) => {
     const { value } = e.target;
-    console.log(form, value);
-    console.log(JSON.stringify(defaultAddress) !== JSON.stringify(form));
     setPaymentMethod(value);
   };
 
   const handleUseDefaultAddress = () => {
     setForm(defaultAddress);
+    setEditingAddress(false);
+  };
+
+  const handleOpenEditForm = () => {
+    setTempForm({ formState });
+    setEditingAddress(true);
+  };
+
+  const handleCancelEditForm = () => {
+    setEditingAddress(false);
+    setTempForm({});
+  };
+
+  const handleSaveEditForm = () => {
+    const requiredFields = ["name", "address", "email", "phone"];
+
+    for (const field of requiredFields) {
+      if (!tempForm[field] || String(tempForm[field]).trim() === "") {
+        alert(`Vui lòng nhập đầy đủ thông tin: Trường [ ${field} ] còn trống.`);
+        return;
+      }
+    }
+
+    setForm({
+      ...tempForm,
+      address: tempForm.address,
+    });
+    setEditingAddress(false);
+    setTempForm({});
   };
 
   const total = cartItems.reduce((acc, item) => {
-    const price = item.salePrice ? item.salePrice : item.originalPrice;
+    const price = item.sale_price ? item.sale_price : item.original_price;
     return acc + price * item.quantity;
   }, 0);
 
+  // Load user từ localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("user");
+    if (saved) {
+      const u = JSON.parse(saved);
+
+      const initialUserData = {
+        name: u.name || "",
+        address: u.address || "",
+        email: u.email || "",
+        phone: u.phone || "",
+        company: u.company || "",
+        notes: u.notes || "",
+        paymentMethod: u.paymentMethod || "cod",
+      };
+      setUser(u);
+      setDefaultAddress(initialUserData);
+      setForm(initialUserData);
+    } else {
+      setDefaultAddress(formState);
+      setForm(formState);
+    }
+  }, []);
+
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
+    const requiredFields = ["name", "address", "email", "phone"];
+
+    for (const field of requiredFields) {
+      if (!form[field] || String(form[field]).trim() === "") {
+        alert(
+          `Vui lòng nhập đầy đủ thông tin thanh toán: Trường [ ${field} ] còn thiếu.`
+        );
+        return;
+      }
+    }
+
     if (!cartItems.length) {
-      alert("Giỏ hàng của bạn đang trống!");
+      alert("Your cart is empty!");
       return;
     }
 
@@ -75,30 +137,29 @@ export default function CheckOut() {
           phone: form.phone,
           address: form.address,
         },
+        user_id: user?.user_id,
         cart: cartItems,
         total,
         payment_method: paymentMethod,
       };
 
       const token = localStorage.getItem("token");
-      if (!token) return alert("Bạn chưa login!");
+      if (!token) {
+        alert("You are not logged in!");
+        return;
+      } // Gửi tạo đơn hàng
 
-      // 🧠 Gửi tạo đơn hàng
       const res = await fetch("http://localhost:5000/api/orders/create", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
       });
 
       const data = await res.json();
 
       if (data.success) {
-        alert("✅ Đơn hàng đã được tạo thành công!");
+        alert("✅ Order created successfully!");
 
-        // 💳 Thanh toán ảo (mock momo/paypal...)
         const payRes = await fetch(
           `http://localhost:5000/api/orders/pay/${data.order_uuid}`,
           {
@@ -112,14 +173,20 @@ export default function CheckOut() {
         const payData = await payRes.json();
 
         if (payData.success) {
-          alert("💰 Thanh toán thành công!");
+          alert("💰 Payment successful!");
           clearCart();
 
           navigate("/");
+        } else {
+          console.error("Lỗi thanh toán:", payData.mess);
+          alert("❌ Lỗi thanh toán: " + (payData.mess || "Vui lòng thử lại."));
         }
       } else {
-        console.error();
-        alert("❌ Không thể tạo đơn hàng!");
+        console.error("Lỗi tạo đơn hàng:", data.mess);
+        alert(
+          "❌ Không thể tạo đơn hàng! " +
+            (data.mess || "Vui lòng kiểm tra lại thông tin.")
+        );
       }
     } catch (err) {
       console.error(err);
@@ -128,58 +195,6 @@ export default function CheckOut() {
       setLoading(false);
     }
   };
-
-  const handleOpenEditForm = () => {
-    setTempForm({ ...formState });
-    setEditingAddress(true);
-  };
-
-  const handleCancelEditForm = () => {
-    // 💡 KHÔNG LÀM GÌ với FORM chính. Chỉ đóng form và xóa TEMPFORM
-    setEditingAddress(false);
-    setTempForm({});
-  };
-
-  const handleSaveEditForm = () => {
-    const requiredFields = ["name", "address", "email", "phone"];
-
-    for (const field of requiredFields) {
-      if (!tempForm[field] || String(tempForm[field]).trim() === "") {
-        alert(
-          `Please fill in complete information: Field [ ${field} ] is required.`
-        );
-        return;
-      }
-    }
-
-    setForm(tempForm);
-    setEditingAddress(false);
-    setTempForm({});
-  };
-
-  // Load user từ localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem("user");
-    if (saved) {
-      const u = JSON.parse(saved);
-      setUser(u);
-
-      const initialUserData = {
-        name: u.name || "",
-        address: u.address || "",
-        email: u.email || "",
-        phone: u.phone || "",
-        company: u.company || "",
-        notes: u.notes || "",
-        paymentMethod: u.paymentMethod || "cod",
-      };
-      setDefaultAddress(initialUserData);
-      setForm(initialUserData);
-    } else {
-      setDefaultAddress(formState);
-      setForm(formState);
-    }
-  }, []);
 
   return (
     <div className={style.checkoutContainer}>
@@ -200,8 +215,8 @@ export default function CheckOut() {
                   className={`${style.savedAddressBox} ${style.fadedAddress}`}
                 >
                   <div className={style.addressHeader}>
-                    <strong>Địa chỉ Mặc định</strong>
-                    <span className={style.defaultTag}>MẶC ĐỊNH</span>
+                    <strong>Default Address</strong>
+                    <span className={style.defaultTag}>DEFAULT</span>
                   </div>
                   <div className={style.rowAddress}>
                     <div className={style.namePhone}>
@@ -211,7 +226,7 @@ export default function CheckOut() {
                         : ""}
                     </div>
                     <div className={style.addressDetail}>
-                      {defaultAddress.address || "Chưa có địa chỉ"}
+                      {defaultAddress.address || "No address yet"}
                     </div>
                   </div>
                   <div className={style.addressActions}>
@@ -220,16 +235,16 @@ export default function CheckOut() {
                       className={style.changeBtn}
                       onClick={handleUseDefaultAddress}
                     >
-                      Chọn địa chỉ mặc định
+                      Select default address
                     </Button>
                   </div>
                 </div>
               )}
               <div className={style.savedAddressBox}>
                 <div className={style.addressHeader}>
-                  <strong>Địa chỉ Giao hàng hiện tại</strong>
+                  <strong>Current Shipping Address</strong>
                   {JSON.stringify(defaultAddress) === JSON.stringify(form) && (
-                    <span className={style.defaultTag}>HIỆN TẠI</span>
+                    <span className={style.defaultTag}>NOW</span>
                   )}
                 </div>
                 <div className={style.rowAddress}>
@@ -239,7 +254,7 @@ export default function CheckOut() {
                   </div>
 
                   <div className={style.addressDetail}>
-                    {form.address || "Chưa có địa chỉ"}
+                    {form.address || "No address yet"}
                   </div>
 
                   <div className={style.addressActions}>
@@ -255,6 +270,8 @@ export default function CheckOut() {
               </div>
             </div>
           )}
+
+          {/* FORM CHỈNH SỬA ĐỊA CHỈ */}
           {editingAddress && (
             <div className={style.editForm}>
               <div className={style.row}>
@@ -272,9 +289,7 @@ export default function CheckOut() {
                 </div>
 
                 <div className={style.formGroup}>
-                  <label>
-                    Company Name  (optional)
-                  </label>
+                  <label>Company Name (optional)</label>
                   <input
                     type="text"
                     placeholder="Company name"
@@ -285,43 +300,20 @@ export default function CheckOut() {
                   />
                 </div>
               </div>
-
               <div className={style.row}>
                 <div className={style.formGroup}>
-                  <label>Address</label>
-                  {/* <input
+                  <label>Detailed Delivery Address</label>
+                  <input
                     type="text"
-                    placeholder="Your provinces"
+                    placeholder="Please enter in full: House number, Street name, Commune/Ward, Province/City"
                     name="address"
                     value={tempForm.address || ""}
                     onChange={handleChange}
                     className={style.inputCheckout}
                     required
-                  /> */}
-
-                  <div className={style.address}>
-                    <input
-                      type="text"
-                      placeholder="Your provinces"
-                      name="provinces"
-                      value={tempForm.provinceAddress || ""}
-                      onChange={handleChange}
-                      className={style.inputCheckout}
-                      required
-                    />
-                    <input
-                      type="text"
-                      placeholder="Your communes"
-                      name="communes"
-                      value={tempForm.communesAddress || ""}
-                      onChange={handleChange}
-                      className={style.inputCheckout}
-                      required
-                    />
-                  </div>
+                  />
                 </div>
               </div>
-
               <div className={style.row}>
                 <div className={style.formGroup}>
                   <label>Email</label>
@@ -349,12 +341,12 @@ export default function CheckOut() {
                   />
                 </div>
               </div>
-
               <div className={style.row}>
                 <Button ghost onClick={handleCancelEditForm}>
                   Cancel
                 </Button>
-                <Button fill onClick={handleSaveEditForm}>
+
+                <Button type="button" fill onClick={handleSaveEditForm}>
                   Save
                 </Button>
               </div>
@@ -382,7 +374,7 @@ export default function CheckOut() {
         <h2>Order Summary</h2>
 
         {cartItems.map((item) => {
-          const price = item.salePrice ? item.salePrice : item.originalPrice;
+          const price = item.sale_price ? item.sale_price : item.original_price;
 
           return (
             <div key={item.id} className={style.item}>

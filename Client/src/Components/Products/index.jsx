@@ -64,12 +64,13 @@ export default function Products() {
       <div className={style.productsBox}>
         {products.slice(0, 10).map((item, index) => {
           const hasSale = item.sale_price && item.sale_price !== null;
-
           return (
             <div
               key={index}
               className={style.productsItem}
-              onClick={() => setSelectedItem(item)}
+              onClick={() => {setSelectedItem(item)
+                console.log("Selected item:", item)
+              }}
             >
               <img
                 src={`http://localhost:5000/uploads/${item.image}`}

@@ -11,36 +11,53 @@ export default function Navbar() {
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
 
-  useEffect(() => {
+  const loadUser = () => {
     const userString = localStorage.getItem("user");
-    if (userString) {
-      try {
-        setUser(JSON.parse(userString));
-      } catch (err) {
-        console.error("Không thể parse user từ localStorage", err);
-        setUser(null);
-      }
-    } else {
+    if (!userString) return setUser(null);
+
+    try {
+      const parsed = JSON.parse(userString);
+      setUser(parsed);
+    } catch (err) {
+      console.error("Không thể parse user từ localStorage", err);
       setUser(null);
     }
+  };
+
+  useEffect(() => {
+    loadUser();
+
+    const onUserUpdated = () => loadUser();
+
+    window.addEventListener("userUpdated", onUserUpdated);
+    return () => window.removeEventListener("userUpdated", onUserUpdated);
   }, []);
 
   const getProfileImageUrl = () => {
-    if (user?.image_url) return `http://localhost:5000${user.image_url}`;
-    if (user?.image)
-      return `http://localhost:5000/uploads/Dashboard/${user.image}`;
-    return "http://localhost:5000/uploads/Dashboard/default-avatar.png";
+    if (!user) return defaultAvatar;
+
+    const baseURL = "http://localhost:5000";
+
+    if (user.image_url) {
+      return `${baseURL}${user.image_url}`;
+    }
+
+    if (user.image) {
+      return `${baseURL}/uploads/Dashboard/${user.image}`;
+    }
+
+    return defaultAvatar;
   };
 
-  // Handle scroll effect
+  const defaultAvatar =
+    "http://localhost:5000/uploads/Dashboard/default-avatar.png";
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
-        // cuộn xuống -> ẩn navbar
         setHidden(true);
       } else {
-        // cuộn lên -> hiện navbar
         setHidden(false);
       }
       lastScrollY.current = currentScrollY;
@@ -51,12 +68,12 @@ export default function Navbar() {
   }, []);
 
   const handleGoToDashboard = () => navigate("/dashboard", { state: { user } });
+
   const handleGoToCart = () => navigate("/shoppingCart");
 
   return (
     <div
       className={`${style.navbarContainer} ${hidden ? style.hidden : ""}`}
-      // optional: smooth transition
       style={{ transition: "top 0.3s" }}
     >
       <div className={`margin-auto ${style.smallOne}`}>
@@ -66,15 +83,16 @@ export default function Navbar() {
             Store Location: VKU - Da Nang, Viet Nam
           </div>
         </div>
+
         <div className={style.links}>
           {user ? (
             <div className={style.account}>
-              Hi, {user.name || "User"}{" "}
+              Hi, {user.name || "User"}
               <div
                 className={style.profile}
                 onClick={handleGoToDashboard}
                 style={{
-                  backgroundImage: `url(${getProfileImageUrl()})`,
+                  backgroundImage: `url('${getProfileImageUrl()}')`,
                 }}
               ></div>
             </div>
@@ -94,17 +112,7 @@ export default function Navbar() {
           <div className={style.logo}></div>
           <div className={style.ecovera}>Ecovera</div>
         </div>
-        {/* <div className={style.searchBox}>
-          <div className={style.iconSearch}></div>
-          <div className={style.search}>
-            <input
-              className={style.inputSearch}
-              type="text"
-              placeholder="Search"
-            />
-          </div>
-          <button className={style.btnSearch}>Search</button>
-        </div> */}
+
         <CartIcon handleGoToCart={handleGoToCart} />
       </div>
 

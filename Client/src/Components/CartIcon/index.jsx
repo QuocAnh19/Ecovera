@@ -11,7 +11,7 @@ export default function CartIcon({ handleGoToCart }) {
   const uniqueProductCount = cartItems.length;
 
   const totalPrice = cartItems.reduce((sum, item) => {
-    const price = item.salePrice ? item.salePrice : item.originalPrice;
+    const price = item.sale_price ? item.sale_price : item.original_price;
     return (sum += price * item.quantity);
   }, 0);
 

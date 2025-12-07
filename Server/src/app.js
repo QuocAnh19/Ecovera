@@ -7,6 +7,8 @@ import loginRoutes from "./Routes/Auth/Login.js";
 import OrderRoutes from "./Routes/Payment/OrderRoutes.js";
 import RegisterRoutes from "./Routes/Auth/Register.js";
 import userRoutes from "./Routes/User/UsersRoutes.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -21,5 +23,7 @@ app.use("/api", loginRoutes);
 app.use("/api/orders", OrderRoutes);
 
 app.use("/api/users", userRoutes);
+
+
 
 export default app;

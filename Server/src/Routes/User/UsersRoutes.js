@@ -27,6 +27,36 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+// API lấy thông tin user theo ID
+router.get("/getUser/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [rows] = await dataBase.query(
+      "SELECT *, CONCAT('/uploads/Dashboard/', image) AS image_url FROM Users WHERE user_id = ?",
+      [id]
+    );
+
+    if (rows.length === 0) {
+      return res.json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      user: rows[0],
+    });
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch user",
+    });
+  }
+});
+
 // API cập nhật thông tin người dùng
 router.post("/updateProfile", upload.single("image"), async (req, res) => {
   try {
@@ -101,4 +131,7 @@ router.post("/updateProfile", upload.single("image"), async (req, res) => {
     res.status(500).json({ success: false, message: "Update failed" });
   }
 });
+
+
+
 export default router;

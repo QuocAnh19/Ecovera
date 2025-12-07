@@ -1,27 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import style from "./Dashboard.module.scss";
 
 import DashboardNavigation from "../../Layouts/Navigation/Dashboard";
+import OrderDetailPopup from "./OrderDetailPopup";
 import { ImgIllustration } from "../../Assets";
 import Button from "../../Components/Button";
 
 export default function Dashboard() {
-  const location = useLocation();
-  const [user, setUser] = useState(null);
-
   const navigate = useNavigate();
 
+  // SECTION SELECTOR
   const [activeSection, setActiveSection] = useState("dashboard");
 
-  // Profile states
+  // USER DATA
+  const [user, setUser] = useState(null);
+
+  // EDITING STATES
   const [isProfileEditing, setIsProfileEditing] = useState(false);
+  const [isAddressEditing, setIsAddressEditing] = useState(false);
+
+  // FORM STATES
   const [profileName, setProfileName] = useState("");
   const [profileImage, setProfileImage] = useState(null);
 
-  // Billing address states
-  const [isAddressEditing, setIsAddressEditing] = useState(false);
   const [billingName, setBillingName] = useState("");
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
@@ -29,47 +32,51 @@ export default function Dashboard() {
 
   const [preview, setPreview] = useState(null);
 
-  // Load user from location or localStorage
   useEffect(() => {
-    if (location.state?.user) {
-      setUser(location.state.user);
-    } else {
-      const savedUser = localStorage.getItem("user");
-      if (savedUser) setUser(JSON.parse(savedUser));
-    }
-  }, [location.state]);
+    const savedUser = localStorage.getItem("user");
 
-  // Sync user data into states
+    if (savedUser) {
+      const parsedUser = JSON.parse(savedUser);
+      setUser(parsedUser);
+
+      fetch(`http://localhost:5000/api/users/getUser/${parsedUser.user_id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.user) {
+            setUser(data.user);
+            localStorage.setItem("user", JSON.stringify(data.user));
+          }
+        })
+        .catch((err) => console.log("Fetch user error:", err));
+    }
+  }, []);
+
   useEffect(() => {
-    if (user) {
-      setProfileName(user.name || "");
-      setProfileImage(user.image || null);
+    if (!user) return;
 
-      setBillingName(user.name || "");
-      setAddress(user.address || "");
-      setEmail(user.email || "");
-      setPhone(user.phone || "");
-    }
+    setProfileName(user.name || "");
+    setProfileImage(user.image || null);
+
+    setBillingName(user.name || "");
+    setAddress(user.address || "");
+    setEmail(user.email || "");
+    setPhone(user.phone || "");
   }, [user]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-      setProfileImage(file);
-    }
+    if (!file) return;
+
+    setPreview(URL.createObjectURL(file));
+    setProfileImage(file);
   };
 
   const handleSave = async (section) => {
-    if (!user?.user_id) {
-      alert("⚠️ Không thể lưu: chưa có thông tin người dùng.");
-      return;
-    }
+    if (!user?.user_id) return alert("Không có user ID!");
 
     const formData = new FormData();
     formData.append("user_id", user.user_id);
 
-    // Update profile
     if (section === "profile") {
       formData.append("name", profileName);
       if (profileImage instanceof File) {
@@ -77,7 +84,6 @@ export default function Dashboard() {
       }
     }
 
-    // Update billing/address
     if (section === "address") {
       formData.append("name", billingName);
       formData.append("address", address);
@@ -92,69 +98,113 @@ export default function Dashboard() {
       });
 
       if (!res.ok) {
-        // Nếu status là 4xx hoặc 5xx, tạo lỗi và nhảy sang catch
-        const errorText = await res.text(); // Đọc phản hồi dưới dạng văn bản
-        throw new Error(`Lỗi HTTP ${res.status}: ${errorText}`);
+        const text = await res.text();
+        throw new Error(`Lỗi: ${res.status} - ${text}`);
       }
 
       const data = await res.json();
+      if (data.success && data.user) {
+        alert("Cập nhật thành công!");
 
-      console.log("Phản hồi từ Server:", data);
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
 
-      if (data.success) {
-        alert("✅ Cập nhật thành công!");
-
-        if (section === "profile") setIsProfileEditing(false);
-        if (section === "address") setIsAddressEditing(false);
-
-        if (data.user) {
-          setUser(data.user);
-
-          setProfileName(data.user.name);
-          setBillingName(data.user.name);
-          setAddress(data.user.address);
-          setEmail(data.user.email);
-          setPhone(data.user.phone);
-
-          setPreview(null);
-          localStorage.setItem("user", JSON.stringify(data.user));
-        }
+        setPreview(null);
+        section === "profile" && setIsProfileEditing(false);
+        section === "address" && setIsAddressEditing(false);
       }
     } catch (err) {
-      console.error("Lỗi chi tiết từ Server:", err);
-      alert(
-        "🔴 Lỗi! Không thể cập nhật hồ sơ. Vui lòng thử lại sau hoặc liên hệ hỗ trợ."
-      );
+      console.error(err);
+      alert("Không thể cập nhật. Thử lại sau!");
     }
   };
 
-  // Determine profile image src
   const profileImgSrc = preview
     ? preview
     : user?.image_url
     ? `http://localhost:5000${user.image_url}`
     : user?.image
     ? `http://localhost:5000/uploads/Dashboard/${user.image}`
-    : "http://localhost:5000/uploads/Dashboard/default-avatar.png";
+    : "/default-avatar.png";
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+    navigate("/signin");
+  };
+
+  // ORDER HISTORY STATES
+  // ORDER HISTORY STATES
+  const [orders, setOrders] = useState([]);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [orderItems, setOrderItems] = useState([]);
+  const [orderInfo, setOrderInfo] = useState(null);
+
+  useEffect(() => {
+    if (activeSection === "orderHistory" && user?.user_id) {
+      fetchOrders();
+    }
+  }, [activeSection]);
+
+  const fetchOrders = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/orders/user/${user.user_id}`
+      );
+      const data = await res.json();
+
+      if (data.success) setOrders(data.orders);
+    } catch (err) {
+      console.error("Lỗi fetch orders:", err);
+    }
+  };
+
+  const handleOpenDetail = async (uuid) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/orders/detail/${uuid}`
+      );
+
+      if (!res.ok) {
+        console.log("HTTP Error:", res.status);
+        return;
+      }
+
+      const data = await res.json();
+
+      if (!data.success) {
+        console.log("Detail error:", data.message);
+        return;
+      }
+
+      setOrderInfo(data.order);
+      setOrderItems(data.items);
+      setOpenPopup(true);
+      document.body.classList.add("noScroll");
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  };
 
   return (
     <div className={style.container}>
       <div className={style.left}>
         <DashboardNavigation
-          onSelect={setActiveSection}
           active={activeSection}
+          onSelect={setActiveSection}
         />
       </div>
 
       {activeSection === "dashboard" && (
-        <div className={style.rightDashboard} id="dashboard">
+        <div className={style.rightDashboard}>
           <div className={style.row}>
-            {/* PROFILE SECTION */}
+            {/* PROFILE */}
             <div className={style.profile}>
               <div className={style.img}>
                 <img
                   src={profileImgSrc}
-                  alt="profile"
+                  alt="avatar"
                   className={style.avatar}
                 />
 
@@ -172,19 +222,16 @@ export default function Dashboard() {
                 <div className={style.name}>
                   {isProfileEditing ? (
                     <input
-                      type="text"
+                      className={style.inputEdit}
                       value={profileName}
                       onChange={(e) => setProfileName(e.target.value)}
-                      className={style.inputEdit}
                     />
                   ) : (
                     profileName
                   )}
                 </div>
 
-                <div className={style.user}>
-                  <p>{user?.role || "Customer"}</p>
-                </div>
+                <p className={style.user}>{user?.role || "Customer"}</p>
               </div>
 
               {!isProfileEditing ? (
@@ -206,72 +253,58 @@ export default function Dashboard() {
 
             {/* BILLING ADDRESS */}
             <div className={style.bg}>
-              <div className={style.title}>BILLING ADDRESS</div>
+              <div className={style.title}>Billing Address</div>
 
-              <div className={style.name}>
-                <div className={style.row}>
-                  <label>Name: </label>
-                  {isAddressEditing ? (
-                    <input
-                      type="text"
-                      value={billingName}
-                      onChange={(e) => setBillingName(e.target.value)}
-                      className={style.inputEdit}
-                    />
-                  ) : (
-                    billingName
-                  )}
-                </div>
+              <div className={style.row}>
+                <label>Name:</label>
+                {isAddressEditing ? (
+                  <input
+                    className={style.inputEdit}
+                    value={billingName}
+                    onChange={(e) => setBillingName(e.target.value)}
+                  />
+                ) : (
+                  billingName
+                )}
               </div>
 
-              <p>
-                <div className={style.row}>
-                  <label>Address:</label>
-                  {isAddressEditing ? (
-                    <>
-                      <input
-                        type="text"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        className={style.inputEdit}
-                      />
-                    </>
-                  ) : (
-                    address || "Chưa có địa chỉ"
-                  )}
-                </div>
-              </p>
-
-              <div className={style.email}>
-                <div className={style.row}>
-                  <label>Email: </label>
-                  {isAddressEditing ? (
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className={style.inputEdit}
-                    />
-                  ) : (
-                    email || "Chưa có email"
-                  )}
-                </div>
+              <div className={style.row}>
+                <label>Address:</label>
+                {isAddressEditing ? (
+                  <input
+                    className={style.inputEdit}
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                ) : (
+                  address || "No address yet"
+                )}
               </div>
 
-              <div className={style.phone}>
-                <div className={style.row}>
-                  <label>Phone: </label>
-                  {isAddressEditing ? (
-                    <input
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className={style.inputEdit}
-                    />
-                  ) : (
-                    phone || "Chưa có số điện thoại"
-                  )}
-                </div>
+              <div className={style.row}>
+                <label>Email:</label>
+                {isAddressEditing ? (
+                  <input
+                    className={style.inputEdit}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                ) : (
+                  email || "No email yet"
+                )}
+              </div>
+
+              <div className={style.row}>
+                <label>Phone:</label>
+                {isAddressEditing ? (
+                  <input
+                    className={style.inputEdit}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                ) : (
+                  phone || "No phone yet"
+                )}
               </div>
 
               {!isAddressEditing ? (
@@ -289,41 +322,76 @@ export default function Dashboard() {
                   >
                     Save
                   </div>
-                  <div className={style.edit}>Cancel</div>
+                  <div
+                    className={style.edit}
+                    onClick={() => setIsAddressEditing(false)}
+                  >
+                    Cancel
+                  </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* ORDER HISTORY SECTION */}
+          {/* ORDER HISTORY
           <div className={style.orderHistory}>
             <div className={style.heading}>
               Recent Order History
               <Button className={style.btn}>View All</Button>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
 
       {activeSection === "orderHistory" && (
-        <div className={style.rightOrderHistory} id="orderHistory">
-          <div className={style.orderHistory}>
-            <div className={style.heading}>Order History</div>
+        <div className={style.rightOrderHistory}>
+          <div className={style.heading}>Order History</div>
+
+          {/* DANH SÁCH ĐƠN HÀNG */}
+          <div className={style.orderList}>
+            {orders.length === 0 ? (
+              <div className={style.noOrder}>Bạn chưa có đơn hàng nào.</div>
+            ) : (
+              orders.map((order) => (
+                <div
+                  key={order.order_id}
+                  className={style.orderRow}
+                  onClick={() => handleOpenDetail(order.order_uuid)}
+                >
+                  <div className={style.code}>#{order.order_id}</div>
+                  <div className={style.amount}>${order.total_amount}</div>
+                  <div className={style.status}>{order.status}</div>
+                  <div className={style.date}>
+                    {new Date(order.created_at).toLocaleString()}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
+          {/* Popup */}
+          <OrderDetailPopup
+            open={openPopup}
+            onClose={() => {
+              setOpenPopup(false);
+              document.body.classList.remove("noScroll");
+            }}
+            items={orderItems}
+            order={orderInfo}
+          />
         </div>
       )}
 
       {activeSection === "setting" && (
-        <div className={style.rightSetting} id="setting">
-          <div className={style.setting}>
-            <img src={ImgIllustration} alt="" />
-          </div>
+        <div className={style.rightSetting}>
+          <img src={ImgIllustration} alt="" />
         </div>
       )}
 
       {activeSection === "logOut" && (
-        <div className={style.rightLogOut} id="logOut">
-          <img src={ImgIllustration} alt="" />
+        <div className={style.rightLogOut}>
+          <Button fill className={style.btn} onClick={handleLogout}>
+            Confirm Logout
+          </Button>
         </div>
       )}
     </div>

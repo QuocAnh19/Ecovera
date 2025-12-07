@@ -108,7 +108,7 @@
                     line-height: 150%;
                 }
 
-                .row{
+                .row {
                     display: flex;
                     flex-direction: row;
                 }
@@ -127,7 +127,7 @@
                     cursor: pointer;
                 }
 
-                .btn{
+                .btn {
                     display: flex;
                     flex-direction: row;
                     gap: 2rem;
@@ -170,31 +170,202 @@
     }
 
     .rightOrderHistory {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        width: 100%;
+        padding: 20px;
 
-        .orderHistory {
+        .heading {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* ======================== ORDER LIST ======================== */
+        .orderList {
             display: flex;
             flex-direction: column;
-            width: 100%;
-            padding: 16px 24px;
-            border: 1px solid $Grey-100;
-            border-radius: 8px;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
 
-            .heading {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                font-size: $font-size-large;
-                font-weight: $font-weight-medium;
+        .noOrder {
+            text-align: center;
+            padding: 30px;
+            background: #f8f8f8;
+            border-radius: 10px;
+            color: #777;
+            font-size: 15px;
+        }
 
+        .orderRow {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            padding: 14px 18px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: 0.2s ease;
+
+            &:hover {
+                background: #f6faff;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
             }
 
+            .code {
+                font-weight: 600;
+                color: #333;
+            }
 
+            .amount {
+                font-weight: 500;
+                color: #d35400;
+            }
+
+            .status {
+                font-weight: 500;
+                color: $Primary-color;
+                text-transform: capitalize;
+            }
+
+            .date {
+                font-size: 14px;
+                color: #666;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .orderRow {
+                grid-template-columns: 1fr 1fr;
+                row-gap: 5px;
+
+                .date {
+                    grid-column: span 2;
+                }
+            }
+        }
+
+        /* ======================== ORDER DETAIL BOX ======================== */
+        .orderDetailBox {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            animation: slideUp 0.3s ease;
+
+            .detailTitle {
+                font-size: 20px;
+                font-weight: 600;
+                margin-bottom: 12px;
+                color: #2c3e50;
+            }
+
+            .detailInfo {
+                display: grid;
+                row-gap: 6px;
+                margin-bottom: 20px;
+
+                div {
+                    font-size: 15px;
+
+                    strong {
+                        color: #333;
+                    }
+                }
+            }
+
+            /* ======================== ITEMS ======================== */
+            .detailItems {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .detailRow {
+                display: grid;
+                grid-template-columns: 60px 1fr auto auto;
+                align-items: center;
+                padding: 10px 12px;
+                background: #fafafa;
+                border-radius: 10px;
+                column-gap: 10px;
+
+                .productImg {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 8px;
+                    object-fit: cover;
+                }
+
+                .productName {
+                    font-weight: 500;
+                }
+
+                .qty {
+                    color: #666;
+                    font-size: 14px;
+                }
+
+                .price {
+                    font-weight: 600;
+                    color: #c0392b;
+                }
+            }
+
+            .totalBox {
+                padding-top: 15px;
+                border-top: 1px solid #eee;
+                font-size: 16px;
+                font-weight: 600;
+                text-align: right;
+
+                strong {
+                    margin-right: 5px;
+                }
+            }
+        }
+
+        /* RESPONSIVE ORDER DETAIL */
+        @media (max-width: 768px) {
+            .detailRow {
+                grid-template-columns: 60px 1fr;
+                grid-template-rows: auto auto;
+
+                .qty,
+                .price {
+                    grid-column: span 2;
+                    margin-left: 70px;
+                }
+            }
         }
     }
+
+    /* ======================== ANIMATIONS ======================== */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
 
 
 }

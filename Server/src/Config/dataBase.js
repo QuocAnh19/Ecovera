@@ -1,15 +1,20 @@
 import mysql from "mysql2";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const dataBase = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "191006",
-  database: "ecovera",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
   waitForConnections: true,
-  connectionLimit: 10,
+  // connectionLimit: parseInt.env.DB_CONNECTION_LIMIT,
   queueLimit: 0,
 });
 
 console.log("✅ MySQL pool initialized (waiting for connections)");
 
-export default dataBase;
+const db = dataBase.promise();
+
+export default db;

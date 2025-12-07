@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import style from "./Categories.module.scss";
 
 import Button from "../Button";
@@ -82,7 +84,11 @@ const categories = [
 ];
 
 export default function Categories({ onClick }) {
+  const navigate = useNavigate();
+
   const handleClick = (id) => {
+    navigate(`/shop?category=${id}`);
+
     if (onClick) onClick(id);
   };
 

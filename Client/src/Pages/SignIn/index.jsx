@@ -43,19 +43,16 @@ export default function SignIn() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("✅ " + data.message);
-        if (form.remember) {
-          localStorage.setItem("user", JSON.stringify(data.user));
-        }
+        alert("✅ " + data.mess);
 
-        localStorage.setItem("token", data.token);
+        // Lưu user vào localStorage
         localStorage.setItem("user", JSON.stringify(data.user));
-        
-        setForm({ email: "", password: "", remember: false });
-
         navigate("/");
+        setTimeout(() => {
+          window.location.reload();
+        }, 200);
       } else {
-        alert("❌ " + data.message);
+        alert("❌ " + data.mess);
       }
     } catch (err) {
       console.error(err);
