@@ -11,6 +11,7 @@ const generateId = (prefix, count) => {
 };
 
 // 🧾 Tạo đơn hàng mới (KHÔNG DÙNG TOKEN)
+// 🧾 Tạo đơn hàng mới (KHÔNG DÙNG TOKEN)
 router.post("/create", async (req, res) => {
   console.log("🟦 Request Body:", req.body);
 
@@ -25,9 +26,8 @@ router.post("/create", async (req, res) => {
 
   try {
     connection = await db.getConnection();
-    await connection.beginTransaction();
+    await connection.beginTransaction(); // 1️⃣ Tạo ORDER_ID (loop tối đa 5 lần tránh trùng)
 
-    // 1️⃣ Tạo ORDER_ID (loop tối đa 5 lần tránh trùng)
     let orderId;
     let attempts = 0;
     let isDuplicate = true;
@@ -57,15 +57,10 @@ router.post("/create", async (req, res) => {
         success: false,
         mess: "Không tạo được Order ID. Vui lòng thử lại!",
       });
-    }
+    } // 2️⃣ Insert order
 
-    // 2️⃣ Insert order
     await connection.query(
-      `
-      INSERT INTO orders 
-        (order_id, user_id, order_uuid, total_amount, shipping_address, payment_method, status, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, 'Processing', NOW())
-    `,
+      `INSERT INTO orders (order_id, user_id, order_uuid, total_amount, shipping_address, payment_method, status, created_at) VALUES (?, ?, ?, ?, ?, ?, 'Processing', NOW())`,
       [
         orderId,
         userId, // vẫn có thể null
@@ -74,22 +69,20 @@ router.post("/create", async (req, res) => {
         shipping_address,
         payment_method.toUpperCase(),
       ]
-    );
+    ); // 3️⃣ Insert order items và chuẩn bị cập nhật tồn kho
 
-    // 3️⃣ Insert order items
     const detailIdBase = countBase * 1000;
     let detailCount = 0;
+    const productUpdates = []; // Mảng chứa các sản phẩm cần cập nhật
 
     for (const item of cart) {
       detailCount++;
 
       const detailId = generateId("DETAIL", detailIdBase + detailCount);
 
-      const productId = item.id || item.product_id;
-      // Ưu tiên lấy price từ FE
-      let price = item.price;
+      const productId = item.id || item.product_id; // Ưu tiên lấy price từ FE
+      let price = item.price; // Nếu FE không có price, fallback sang salePrice/originalPrice
 
-      // Nếu FE không có price, fallback sang salePrice/originalPrice
       if (!price) {
         price = item.sale_price ?? item.original_price ?? 0;
       }
@@ -99,13 +92,23 @@ router.post("/create", async (req, res) => {
       }
 
       await connection.query(
-        `
-        INSERT INTO order_items 
-          (order_detail_id, order_id, product_id, quantity, price)
-        VALUES (?, ?, ?, ?, ?)
-      `,
+        `INSERT INTO order_items (order_detail_id, order_id, product_id, quantity, price) VALUES (?, ?, ?, ?, ?)`,
         [detailId, orderId, productId, item.quantity, price]
       );
+
+      // 📝 Thêm thông tin sản phẩm vào mảng để cập nhật tồn kho sau
+      productUpdates.push({ productId, quantity: item.quantity });
+    }
+
+    // 4️⃣ Cập nhật số lượng sản phẩm (trừ đi số lượng đã đặt)
+    for (const update of productUpdates) {
+      await connection.query(
+        `UPDATE products 
+         SET quantity = quantity - ? 
+         WHERE product_id = ? AND quantity >= ?`,
+        [update.quantity, update.productId, update.quantity]
+      );
+      // Lưu ý: Thêm điều kiện quantity >= ? để tránh tồn kho âm nếu có nhiều giao dịch đồng thời
     }
 
     await connection.commit();
