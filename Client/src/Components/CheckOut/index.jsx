@@ -53,7 +53,7 @@ export default function CheckOut() {
   };
 
   const handleOpenEditForm = () => {
-    setTempForm({ formState });
+    setTempForm({ ...form });
     setEditingAddress(true);
   };
 
@@ -109,6 +109,17 @@ export default function CheckOut() {
     }
   }, []);
 
+  const [toast, setToast] = useState("");
+
+  const showToast = (message, type) => {
+    console.log(`[Toast ${type.toUpperCase()}]: ${message}`);
+
+    setToast(message);
+
+    const timerId = setTimeout(() => setToast(""), 3000);
+    return timerId;
+  };
+
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
     const requiredFields = ["name", "address", "email", "phone"];
@@ -128,6 +139,7 @@ export default function CheckOut() {
     }
 
     setLoading(true);
+    let timerId = null;
 
     try {
       const orderData = {
@@ -158,7 +170,7 @@ export default function CheckOut() {
       const data = await res.json();
 
       if (data.success) {
-        alert("✅ Order created successfully!");
+        setToast("Đơn hàng đã được tạo thành công!", "success");
 
         const payRes = await fetch(
           `http://localhost:5000/api/orders/pay/${data.order_uuid}`,
@@ -173,24 +185,33 @@ export default function CheckOut() {
         const payData = await payRes.json();
 
         if (payData.success) {
-          alert("💰 Payment successful!");
+          alert("💰 Thanh toán thành công! Đang chuyển hướng...");
+          setToast("Thanh toán thành công!", "success");
+          setTimeout(() => {
+            clearCart();
+            navigate("/");
+          }, 1500);
           clearCart();
 
           navigate("/");
         } else {
           console.error("Lỗi thanh toán:", payData.mess);
-          alert("❌ Lỗi thanh toán: " + (payData.mess || "Vui lòng thử lại."));
+          timerId = showToast(
+            "Lỗi thanh toán: " + (payData.mess || "Vui lòng thử lại."),
+            "error"
+          );
         }
       } else {
         console.error("Lỗi tạo đơn hàng:", data.mess);
-        alert(
-          "❌ Không thể tạo đơn hàng! " +
-            (data.mess || "Vui lòng kiểm tra lại thông tin.")
+        timerId = showToast(
+          "Không thể tạo đơn hàng! " +
+            (data.mess || "Vui lòng kiểm tra lại thông tin."),
+          "error"
         );
       }
     } catch (err) {
       console.error(err);
-      alert("Đã có lỗi khi tạo đơn hàng.");
+      timerId = showToast("Đã có lỗi khi tạo đơn hàng.", "error");
     } finally {
       setLoading(false);
     }
@@ -453,6 +474,7 @@ export default function CheckOut() {
             {loading ? "Processing..." : "Place Order"}
           </Button>
         </div>
+        {toast && <div className={style.toast}>{toast}</div>}
       </div>
     </div>
   );
