@@ -7,6 +7,8 @@ import loginRoutes from "./Routes/Auth/Login.js";
 import OrderRoutes from "./Routes/Payment/OrderRoutes.js";
 import RegisterRoutes from "./Routes/Auth/Register.js";
 import userRoutes from "./Routes/User/UsersRoutes.js";
+import AdminRoutes from "./Routes/Admin/AdminRoutes.js";
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -24,6 +26,6 @@ app.use("/api/orders", OrderRoutes);
 
 app.use("/api/users", userRoutes);
 
-
+app.use("/api/admin", AdminRoutes);
 
 export default app;

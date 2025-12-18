@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import style from "./AddProduct.module.scss";
 
+// import Button from "../../Components/Button";
+
 export default function AddProduct() {
   const [form, setForm] = useState({
     name: "",
@@ -12,7 +14,6 @@ export default function AddProduct() {
   });
   const [image, setImage] = useState(null);
 
-  // Chỉ dùng cho input text/number/select đơn
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
@@ -61,7 +62,7 @@ export default function AddProduct() {
 
   return (
     <div className={style.addProduct}>
-      <h2>Thêm sản phẩm mới</h2>
+      <h5>Thêm sản phẩm mới</h5>
       <form onSubmit={handleSubmit}>
         <label>Tên sản phẩm:</label>
         <input
@@ -142,6 +143,7 @@ export default function AddProduct() {
           required
         />
 
+        {/* <Button fill> </Button> */}
         <button type="submit">Thêm sản phẩm</button>
       </form>
     </div>

@@ -1,0 +1,58 @@
+@use "../../../Styles/variable" as *;
+
+.container {
+    width: 312px;
+    border: 1px solid $Grey-100;
+    border-radius: 8px;
+    padding-bottom: 12px;
+
+    .heading {
+        font-size: $font-size-large;
+        font-weight: $font-weight-medium;
+        padding: 24px 0 16px 20px;
+    }
+
+    .item {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        padding: 16px 20px;
+        cursor: pointer;
+
+        .title {
+            font-size: $font-size-small;
+            font-weight: $font-weight-regular;
+            color: $Grey-600;
+            line-height: 150%;
+        }
+
+        &:hover {
+            background-color: $Grey-50;
+            padding: 16px 18px;
+
+            path {
+                fill: $Grey-900;
+
+            }
+
+            .title {
+                color: $Grey-900;
+            }
+        }
+    }
+
+    .active {
+        background-color: $Green-grey-50;
+        border-left: 3px solid $Primary-color;
+        padding: 16px 18px;
+
+        path {
+            fill: $Grey-900;
+
+        }
+
+        .title {
+            color: $Grey-900;
+        }
+    }
+}

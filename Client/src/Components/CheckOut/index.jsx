@@ -185,7 +185,7 @@ export default function CheckOut() {
         const payData = await payRes.json();
 
         if (payData.success) {
-          alert("💰 Thanh toán thành công! Đang chuyển hướng...");
+          alert("Thanh toán thành công! Đang chuyển hướng...");
           setToast("Thanh toán thành công!", "success");
           setTimeout(() => {
             clearCart();
