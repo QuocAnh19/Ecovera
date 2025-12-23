@@ -52,7 +52,7 @@
                 display: flex;
                 flex-direction: row;
                 padding: 14px;
-                border: 1px solid #ccc;
+                border: 1px solid $Grey-200;
                 width: 100%;
                 border-radius: 6px;
                 font-size: $font-size-tiny;
@@ -71,7 +71,7 @@
                 width: 100%;
                 min-height: 80px;
                 padding: 0.7rem;
-                border: 1px solid #ccc;
+                border: 1px solid $Grey-200;
                 border-radius: 6px;
                 font-size: 0.95rem;
                 resize: vertical;

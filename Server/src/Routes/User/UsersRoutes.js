@@ -103,14 +103,14 @@ router.post("/updateProfile", upload.single("image"), async (req, res) => {
     // Thực thi lệnh cập nhật
     await dataBase.promise().query(sql, params);
 
-    // ... (Phần Query lại user và trả về response - KHÔNG THAY ĐỔI)
+    // ...Phần Query lại user và trả về response - KHÔNG THAY ĐỔI
     const [rows] = await dataBase
       .promise()
       .query(
         "SELECT *, CONCAT('/uploads/Dashboard/', image) AS image_url FROM Users WHERE user_id = ?",
         [user_id]
       );
-    // ... (Phần trả về updatedUser)
+    // ...Phần trả về updatedUser
 
     if (rows.length === 0) {
       return res
@@ -127,11 +127,8 @@ router.post("/updateProfile", upload.single("image"), async (req, res) => {
     });
   } catch (err) {
     console.error("Error updating profile:", err);
-    // Bắt lỗi 500 nếu có bất kỳ vấn đề nào khác (như DB NOT NULL,...)
     res.status(500).json({ success: false, message: "Update failed" });
   }
 });
-
-
 
 export default router;

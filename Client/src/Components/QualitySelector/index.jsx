@@ -5,7 +5,6 @@ import style from "./QualitySelector.module.scss";
 export default function QualitySelector({ value, onChange }) {
   const [quantity, setQuantity] = useState(value ?? 1);
 
-  // Nếu prop value thay đổi từ bên ngoài, đồng bộ lại
   useEffect(() => {
     if (value !== undefined) setQuantity(value);
   }, [value]);

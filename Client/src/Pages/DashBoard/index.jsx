@@ -5,8 +5,8 @@ import style from "./Dashboard.module.scss";
 
 import DashboardNavigation from "../../Layouts/Navigation/Dashboard";
 import OrderDetailPopup from "./OrderDetailPopup";
-import { ImgIllustration } from "../../Assets";
 import Button from "../../Components/Button";
+import Error from "../Error";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ export default function Dashboard() {
   };
 
   const handleSave = async (section) => {
-    if (!user?.user_id) return alert("Không có user ID!");
+    if (!user?.user_id) return alert("No user ID!");
 
     const formData = new FormData();
     formData.append("user_id", user.user_id);
@@ -104,7 +104,7 @@ export default function Dashboard() {
 
       const data = await res.json();
       if (data.success && data.user) {
-        alert("Cập nhật thành công!");
+        alert("Update successful!");
 
         setUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
@@ -115,7 +115,7 @@ export default function Dashboard() {
       }
     } catch (err) {
       console.error(err);
-      alert("Không thể cập nhật. Thử lại sau!");
+      alert("Unable to update. Try again later.!");
     }
   };
 
@@ -134,7 +134,6 @@ export default function Dashboard() {
     navigate("/signin");
   };
 
-  // ORDER HISTORY STATES
   // ORDER HISTORY STATES
   const [orders, setOrders] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
@@ -156,7 +155,7 @@ export default function Dashboard() {
 
       if (data.success) setOrders(data.orders);
     } catch (err) {
-      console.error("Lỗi fetch orders:", err);
+      console.error("Fetch orders error:", err);
     }
   };
 
@@ -332,14 +331,6 @@ export default function Dashboard() {
               )}
             </div>
           </div>
-
-          {/* ORDER HISTORY
-          <div className={style.orderHistory}>
-            <div className={style.heading}>
-              Recent Order History
-              <Button className={style.btn}>View All</Button>
-            </div>
-          </div> */}
         </div>
       )}
 
@@ -350,7 +341,9 @@ export default function Dashboard() {
           {/* DANH SÁCH ĐƠN HÀNG */}
           <div className={style.orderList}>
             {orders.length === 0 ? (
-              <div className={style.noOrder}>Bạn chưa có đơn hàng nào.</div>
+              <div className={style.noOrder}>
+                You don't have any orders yet..
+              </div>
             ) : (
               orders.map((order) => (
                 <div
@@ -383,7 +376,7 @@ export default function Dashboard() {
 
       {activeSection === "setting" && (
         <div className={style.rightSetting}>
-          <img src={ImgIllustration} alt="" />
+          <Error />
         </div>
       )}
 

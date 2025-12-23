@@ -7,56 +7,55 @@ export default function OrderDetailPopup({ open, onClose, items, order }) {
   return (
     <div className={style.overlay}>
       <div className={style.popup}>
-        {/* CLOSE BUTTON */}
         <button className={style.closeBtn} onClick={onClose}>
-          ×
+          x
         </button>
 
-        <h2 className={style.title}>Chi tiết đơn hàng</h2>
+        <h4>Order Details</h4>
 
         {/* ====== ORDER INFO ====== */}
         <div className={style.section}>
-          <h3>Thông tin đơn hàng</h3>
-
+          <h6>Order Information</h6>
           <div className={style.infoBox}>
             <p>
-              <strong>Mã đơn hàng:</strong> {order.order_id}
+              <strong>Order ID:</strong> {order.order_id}
             </p>
             <p>
-              <strong>Ngày tạo:</strong> {order.created_at}
+              <strong>Creation date:</strong> {order.created_at}
             </p>
             <p>
-              <strong>Trạng thái:</strong> {order.status}
+              <strong>Status:</strong> {order.status}
             </p>
             <p>
-              <strong>Phương thức thanh toán:</strong> {order.payment_method}
+              <strong>Payment method:</strong> {order.payment_method}
             </p>
             <p>
-              <strong>Tổng tiền:</strong> {order.total_amount.toLocaleString()}₫
+              <strong>Total amount:</strong> $
+              {order.total_amount.toLocaleString()}
             </p>
           </div>
         </div>
 
         {/* ====== SHIPPING INFO ====== */}
         <div className={style.section}>
-          <h3>Thông tin người nhận</h3>
+          <h6>Receiver Information</h6>
 
           <div className={style.infoBox}>
             <p>
-              <strong>Người nhận:</strong> {order.receiver_name}
+              <strong>Receiver:</strong> {order.receiver_name}
             </p>
             <p>
-              <strong>Số điện thoại:</strong> {order.receiver_phone}
+              <strong>Phone number:</strong> {order.receiver_phone}
             </p>
             <p>
-              <strong>Địa chỉ:</strong> {order.shipping_address}
+              <strong>Address:</strong> {order.shipping_address}
             </p>
           </div>
         </div>
 
         {/* ====== ITEMS LIST ====== */}
         <div className={style.section}>
-          <h3>Sản phẩm trong đơn</h3>
+          <h6>Products in order</h6>
 
           <div className={style.list}>
             {items.map((item) => (
@@ -69,8 +68,9 @@ export default function OrderDetailPopup({ open, onClose, items, order }) {
 
                 <div className={style.info}>
                   <p className={style.productName}>{item.product_name}</p>
-                  <p>Giá: {item.price.toLocaleString()}₫</p>
-                  <p>Số lượng: {item.quantity}</p>
+                  <p>
+                    Price: ${item.price.toLocaleString()} x {item.quantity}
+                  </p>
                 </div>
               </div>
             ))}

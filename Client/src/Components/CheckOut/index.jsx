@@ -67,7 +67,9 @@ export default function CheckOut() {
 
     for (const field of requiredFields) {
       if (!tempForm[field] || String(tempForm[field]).trim() === "") {
-        alert(`Vui lòng nhập đầy đủ thông tin: Trường [ ${field} ] còn trống.`);
+        alert(
+          `Please fill in all the information: School [ ${field} ] còn trống.`
+        );
         return;
       }
     }
@@ -127,7 +129,7 @@ export default function CheckOut() {
     for (const field of requiredFields) {
       if (!form[field] || String(form[field]).trim() === "") {
         alert(
-          `Vui lòng nhập đầy đủ thông tin thanh toán: Trường [ ${field} ] còn thiếu.`
+          `Please fill in all the information: Field [ ${field} ] is missing.`
         );
         return;
       }
@@ -170,7 +172,7 @@ export default function CheckOut() {
       const data = await res.json();
 
       if (data.success) {
-        setToast("Đơn hàng đã được tạo thành công!", "success");
+        setToast("The order has been successfully created.!", "success");
 
         const payRes = await fetch(
           `http://localhost:5000/api/orders/pay/${data.order_uuid}`,
@@ -185,8 +187,8 @@ export default function CheckOut() {
         const payData = await payRes.json();
 
         if (payData.success) {
-          alert("Thanh toán thành công! Đang chuyển hướng...");
-          setToast("Thanh toán thành công!", "success");
+          alert("Payment successful!");
+          setToast("Payment successful!", "success");
           setTimeout(() => {
             clearCart();
             navigate("/");
@@ -195,23 +197,26 @@ export default function CheckOut() {
 
           navigate("/");
         } else {
-          console.error("Lỗi thanh toán:", payData.mess);
+          console.error("Payment error:", payData.mess);
           timerId = showToast(
-            "Lỗi thanh toán: " + (payData.mess || "Vui lòng thử lại."),
+            "Payment error: " + (payData.mess || "Please try again."),
             "error"
           );
         }
       } else {
-        console.error("Lỗi tạo đơn hàng:", data.mess);
+        console.error("Error creating order:", data.mess);
         timerId = showToast(
-          "Không thể tạo đơn hàng! " +
-            (data.mess || "Vui lòng kiểm tra lại thông tin."),
+          "Unable to create order! " +
+            (data.mess || "Please check your information."),
           "error"
         );
       }
     } catch (err) {
       console.error(err);
-      timerId = showToast("Đã có lỗi khi tạo đơn hàng.", "error");
+      timerId = showToast(
+        "An error occurred while creating the order.",
+        "error"
+      );
     } finally {
       setLoading(false);
     }

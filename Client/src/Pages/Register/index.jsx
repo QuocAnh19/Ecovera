@@ -17,7 +17,6 @@ export default function Register() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Xử lý thay đổi input
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
@@ -51,7 +50,7 @@ export default function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("✅ " + data.message);
+        alert("OK" + data.message);
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
 
@@ -63,7 +62,7 @@ export default function Register() {
         });
         navigate("/signin");
       } else {
-        alert("❌ " + data.message);
+        alert("ERROR" + data.message);
       }
     } catch (err) {
       console.error(err);
@@ -78,7 +77,6 @@ export default function Register() {
       <form className={style.formContainer} onSubmit={handleSubmit}>
         <h2>Create Account</h2>
 
-        {/* Email */}
         <input
           type="email"
           name="email"
@@ -88,7 +86,6 @@ export default function Register() {
           required
         />
 
-        {/* Password */}
         <div className={style.passwordGroup}>
           <input
             type={showPassword ? "text" : "password"}
@@ -106,7 +103,6 @@ export default function Register() {
           </span>
         </div>
 
-        {/* Confirm Password */}
         <div className={style.passwordGroup}>
           <input
             type={showConfirm ? "text" : "password"}
@@ -124,7 +120,6 @@ export default function Register() {
           </span>
         </div>
 
-        {/* Checkbox */}
         <label className={style.checkbox}>
           <input
             type="checkbox"
@@ -135,12 +130,10 @@ export default function Register() {
           <span>Accept all terms & Conditions</span>
         </label>
 
-        {/* Submit */}
         <button type="submit" className={style.createBtn} disabled={loading}>
           {loading ? "Creating..." : "Create Account"}
         </button>
 
-        {/* Login link */}
         <p className={style.loginText}>
           Already have account <a href="/signin">Login</a>
         </p>

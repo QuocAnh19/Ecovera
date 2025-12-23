@@ -1,6 +1,8 @@
 @use "./_variable.scss" as *;
 @use "./reset.scss" as *;
 
+$font-main: "Poppins", sans-serif;
+
 h1 {
   font-family: $font-main;
   font-size: 56px;
@@ -31,7 +33,7 @@ h4 {
   font-family: $font-main;
   font-size: 40px;
   font-weight: $font-weight-regular;
-  line-height: 48%;
+  line-height: 120%;
   color: $text-heading-color;
 }
 
@@ -39,8 +41,14 @@ h5 {
   font-family: $font-main;
   font-size: 32px;
   font-weight: $font-weight-regular;
-  line-height: 40%;
+  line-height: 120%;
   color: $text-heading-color;
-  padding-bottom: 24px;
 }
 
+h6 {
+  font-family: $font-main;
+  font-size: 24px;
+  font-weight: $font-weight-regular;
+  line-height: 120%;
+  color: $text-heading-color;
+}

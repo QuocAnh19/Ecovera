@@ -13,7 +13,7 @@ const dataBase = mysql.createPool({
   queueLimit: 0,
 });
 
-console.log("✅ MySQL pool initialized (waiting for connections)");
+console.log("==== MySQL pool initialized (waiting for connections) ====");
 
 const db = dataBase.promise();
 

@@ -19,7 +19,7 @@ export default function Navbar() {
       const parsed = JSON.parse(userString);
       setUser(parsed);
     } catch (err) {
-      console.error("Không thể parse user từ localStorage", err);
+      console.error("Unable to parse user from localStorage", err);
       setUser(null);
     }
   };

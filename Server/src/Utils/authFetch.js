@@ -11,7 +11,7 @@ export async function authFetch(url, options = {}) {
     },
   });
 
-  // Nếu accessToken hết hạn → BE trả status 401 hoặc mess: "expired"
+  // Nếu accessToken hết hạn --> BE trả status 401 hoặc mess: "expired"
   if (res.status === 401) {
     const refreshRes = await fetch("http://localhost:5000/api/auth/refresh", {
       method: "POST",

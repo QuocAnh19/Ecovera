@@ -22,7 +22,7 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // Thêm product (hỗ trợ 1 product hoặc mảng)
+  // Thêm product
   const addToCart = (products) => {
     const items = Array.isArray(products) ? products : [products];
 
@@ -42,7 +42,6 @@ export const CartProvider = ({ children }) => {
             0
         );
 
-        // Quantity mặc định là 1 nếu không có
         const quantity = Number(product.quantity) || 1;
 
         // Chuẩn hóa product trước khi push vào cart
@@ -53,7 +52,7 @@ export const CartProvider = ({ children }) => {
           quantity,
         };
 
-        // Kiểm tra nếu sản phẩm đã có trong giỏ → cộng quantity
+        // Kiểm tra nếu sản phẩm đã có trong giỏ hay chưa
         const index = newCart.findIndex((item) => item.id === id);
         if (index >= 0) {
           newCart[index].quantity += quantity;

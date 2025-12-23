@@ -44,7 +44,7 @@ export default function AddProduct() {
         throw new Error("Lỗi khi thêm sản phẩm");
       }
 
-      alert("✅ Thêm sản phẩm thành công!");
+      alert("Product added successfully.!");
       setForm({
         name: "",
         category: "",
@@ -56,15 +56,15 @@ export default function AddProduct() {
       setImage(null);
     } catch (error) {
       console.error(error);
-      alert("❌ Lỗi khi thêm sản phẩm");
+      alert("Error when adding product. Please try again.");
     }
   };
 
   return (
     <div className={style.addProduct}>
-      <h5>Thêm sản phẩm mới</h5>
+      <h5>Add New Product</h5>
       <form onSubmit={handleSubmit}>
-        <label>Tên sản phẩm:</label>
+        <label>Product name:</label>
         <input
           type="text"
           name="name"
@@ -73,20 +73,20 @@ export default function AddProduct() {
           required
         />
 
-        <label>Danh mục:</label>
+        <label>Category:</label>
         <select
           name="category"
           value={form.category}
           onChange={handleChange}
           required
         >
-          <option value="">-- Chọn category --</option>
+          <option value="">-- Choose category --</option>
           <option value="Fruits">Fresh Fruit</option>
           <option value="Vegetables">Fresh Vegetables</option>
           <option value="MeatFish">Meat & Fish</option>
         </select>
 
-        <label>Giá ban đầu:</label>
+        <label>Original Price:</label>
         <input
           type="number"
           step="0.01"
@@ -96,7 +96,7 @@ export default function AddProduct() {
           required
         />
 
-        <label>Giá sale (nếu có):</label>
+        <label>Sale Price (if any):</label>
         <input
           type="number"
           step="0.01"
@@ -105,7 +105,7 @@ export default function AddProduct() {
           onChange={handleChange}
         />
 
-        <label>Tag sản phẩm: (nếu có)</label>
+        <label>Product tags: (if any)</label>
         <select
           name="tags"
           multiple
@@ -125,7 +125,7 @@ export default function AddProduct() {
           <option value="TAG004">Best Sale</option>
         </select>
 
-        <label>Số lượng:</label>
+        <label>Quality:</label>
         <input
           type="number"
           min="0"
@@ -135,7 +135,7 @@ export default function AddProduct() {
           required
         />
 
-        <label>Ảnh sản phẩm:</label>
+        <label>Product image:</label>
         <input
           type="file"
           accept="image/*"
@@ -144,7 +144,7 @@ export default function AddProduct() {
         />
 
         {/* <Button fill> </Button> */}
-        <button type="submit">Thêm sản phẩm</button>
+        <button type="submit">Add Product</button>
       </form>
     </div>
   );

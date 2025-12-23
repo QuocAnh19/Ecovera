@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useCart } from "../../../ConText/CartContext";
 
 import style from "./QuickView.module.scss";
+
 import Button from "../../Button";
 import {
   IconLogoBrand,

@@ -7,7 +7,6 @@ const router = express.Router();
 
 const SECRET = process.env.JWT_SECRET;
 
-// Hàm tạo user_id dạng USR-XXXXXX
 const generateUserId = () => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let id = "USR-";
@@ -21,7 +20,6 @@ router.post("/register", async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    // ⭐ SỬA: Đổi 'message' thành 'mess'
     return res.status(400).json({ success: false, mess: "Missing fields" });
   }
 
@@ -31,7 +29,6 @@ router.post("/register", async (req, res) => {
       email,
     ]);
     if (rows.length > 0) {
-      // ⭐ SỬA: Đổi 'message' thành 'mess'
       return res
         .status(400)
         .json({ success: false, mess: "Email already exists" });
@@ -40,7 +37,7 @@ router.post("/register", async (req, res) => {
     // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // tạo user_id (Lưu ý: Bạn nên kiểm tra trùng lặp user_id do hàm random)
+    // tạo user_id
     const user_id = generateUserId();
 
     // lưu vào db
@@ -56,7 +53,6 @@ router.post("/register", async (req, res) => {
 
     res.status(201).json({
       success: true,
-      // ⭐ SỬA: Đổi 'message' thành 'mess'
       mess: "Account created successfully",
       user: { id: user_id, email },
       token,
@@ -65,7 +61,6 @@ router.post("/register", async (req, res) => {
     console.error(err);
     res
       .status(500)
-      // ⭐ SỬA: Đổi 'message' thành 'mess'
       .json({ success: false, mess: "Server error", error: err.message });
   }
 });

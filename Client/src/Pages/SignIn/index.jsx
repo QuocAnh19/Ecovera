@@ -43,16 +43,15 @@ export default function SignIn() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("✅ " + data.mess);
+        alert("OK" + data.mess);
 
-        // Lưu user vào localStorage
         localStorage.setItem("user", JSON.stringify(data.user));
         navigate("/");
         setTimeout(() => {
           window.location.reload();
         }, 200);
       } else {
-        alert("❌ " + data.mess);
+        alert("ERROR" + data.mess);
       }
     } catch (err) {
       console.error(err);
@@ -108,7 +107,7 @@ export default function SignIn() {
         </button>
 
         <p className={style.registerText}>
-          Don’t have an account? <a href="/register">Register</a>
+          Don't have an account? <a href="/register">Register</a>
         </p>
       </form>
     </div>

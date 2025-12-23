@@ -6,7 +6,6 @@ import db from "../../Config/dataBase.js";
 
 const router = express.Router();
 
-// Hàm tạo product_id ngẫu nhiên
 const generateProductId = () => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let id = "PRD-";
@@ -66,7 +65,7 @@ router.get("/", async (req, res) => {
 
     res.json(products);
   } catch (err) {
-    console.error("❌ Error fetching products with tags:", err);
+    console.error("Error fetching products with tags:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
@@ -92,7 +91,7 @@ router.get("/category-count", async (req, res) => {
 
     res.json(result);
   } catch (err) {
-    console.error("❌ Error fetching category counts:", err);
+    console.error("Error fetching category counts:", err);
     res.status(500).json({ message: "Server error" });
   }
 });

@@ -1,9 +1,13 @@
+import { useNavigate } from "react-router-dom";
+
 import style from "./Error.module.scss";
 
 import Button from "../../Components/Button";
 import { ImgIllustration } from "../../Assets";
 
 export default function Error() {
+  const navigate = useNavigate();
+
   return (
     <div className={style.container}>
       <img src={ImgIllustration} alt="" />
@@ -12,7 +16,9 @@ export default function Error() {
         Ut consequat ac tortor eu vehicula. Aenean accumsan purus eros. Maecenas
         sagittis tortor at metus mollis
       </p>
-      <Button fill className={style.btn}>Back to Home</Button>
+      <Button fill className={style.btn} onClick={() => navigate("/")}>
+        Back to Home
+      </Button>
     </div>
   );
 }

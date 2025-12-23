@@ -14,19 +14,19 @@ export default function Users() {
       const response = await fetch("http://localhost:5000/api/admin/users/all");
       
       if (!response.ok) {
-        throw new Error("Không thể lấy dữ liệu từ server");
+        throw new Error("Unable to fetch data from server");
       }
 
       const data = await response.json();
       setUsers(data);
     } catch (err) {
-      console.error("Lỗi fetch users:", err.message);
+      console.error("Error fetching users:", err.message);
     }
   };
 
   // Changing Roles
   const handleRoleChange = async (userId, newRole) => {
-    if (!window.confirm(`Xác nhận đổi quyền thành ${newRole}?`)) return;
+    if (!window.confirm(`Confirm changing role to ${newRole}?`)) return;
 
     try {
       const response = await fetch(`http://localhost:5000/api/admin/users/update-role/${userId}`, {
@@ -38,7 +38,7 @@ export default function Users() {
       });
 
       if (!response.ok) {
-        throw new Error("Cập nhật thất bại");
+        throw new Error("Update failed");
       }
 
       // Update the state in place so the UI changes immediately.
@@ -46,16 +46,16 @@ export default function Users() {
         prevUsers.map((u) => (u.user_id === userId ? { ...u, role: newRole } : u))
       );
       
-      alert("Cập nhật quyền thành công!");
+      alert("Permissions updated successfully!");
     } catch (err) {
-      console.error("Lỗi cập nhật role:", err.message);
-      alert("Đã có lỗi xảy ra khi lưu vào database.");
+      console.error("Role update error:", err.message);
+      alert("An error occurred while saving to the database.");
     }
   };
 
   return (
     <div className={style.container}>
-      <h2 className={style.title}>User management</h2>
+      <h4>User management</h4>
       <div className={style.tableWrapper}>
         <table className={style.table}>
           <thead>
@@ -88,7 +88,7 @@ export default function Users() {
                   </td>
                   <td>
                     <p>{user.email}</p>
-                    <small>{user.phone || "Chưa cập nhật"}</small>
+                    <small>{user.phone || "Not updated"}</small>
                   </td>
                   <td>
                     <span className={style.address} title={user.address}>

@@ -11,7 +11,6 @@ import { IconClose } from "../../Assets/Icon";
 export default function ShoppingCart() {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
 
-  // Tính subtotal và tổng
   const subtotal = cartItems.reduce((sum, item) => {
     const price = Number(item.sale_price ?? item.original_price);
     return sum + price * item.quantity;

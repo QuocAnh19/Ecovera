@@ -131,8 +131,8 @@ export default function Shop() {
                 <div className={style.tagContainer}>
                   {item.tags &&
                     Array.isArray(item.tags) &&
-                    item.tags.map((tag, i) => (
-                      <Tag key={i} type={tag}>
+                    item.tags.map((tag, index) => (
+                      <Tag key={index} type={tag}>
                         {tag}
                       </Tag>
                     ))}
@@ -140,9 +140,7 @@ export default function Shop() {
 
                 <div className={style.content}>
                   <div className={style.leftContent}>
-                    <div className={style.title}>
-                      <p>{item.name}</p>
-                    </div>
+                    <div className={style.title}>{item.name}</div>
 
                     <div className={style.price}>
                       {hasSale ? (

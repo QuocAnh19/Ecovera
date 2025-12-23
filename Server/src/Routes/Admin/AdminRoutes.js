@@ -1,6 +1,7 @@
 import express from "express";
+import db from "../../Config/dataBase.js";
+
 const router = express.Router();
-import db from "../../config/dataBase.js";
 
 // 1. Lấy tất cả đơn hàng
 router.get("/orders/all", async (req, res) => {

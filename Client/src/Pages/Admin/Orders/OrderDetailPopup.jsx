@@ -22,12 +22,12 @@ export default function OrderDetailPopup({ open, onClose, items, order }) {
           &times;
         </button>
 
-        <h2 className={style.title}>Order Details #{order.order_id}</h2>
+        <h4>Order Details #{order.order_id}</h4>
 
         <div className={style.grid}>
           <div className={style.infoSection}>
             <div className={style.card}>
-              <h3>Customers & Receiving</h3>
+              <h6>Customers & Receiving</h6>
               <p>
                 <strong>User ID:</strong> {order.user_id}
               </p>
@@ -43,7 +43,7 @@ export default function OrderDetailPopup({ open, onClose, items, order }) {
             </div>
 
             <div className={style.card}>
-              <h3>Payment</h3>
+              <h6>Payment</h6>
               <p>
                 <strong>Method:</strong> {order.payment_method}
               </p>
@@ -51,15 +51,14 @@ export default function OrderDetailPopup({ open, onClose, items, order }) {
                 <strong>Status:</strong> {renderStatus(order.status)}
               </p>
               <p className={style.total}>
-                <strong>Total:</strong>{" "}
-                ${order.total_amount?.toLocaleString()}
+                <strong>Total:</strong> ${order.total_amount?.toLocaleString()}
               </p>
             </div>
           </div>
 
-          {/* Cột phải: Danh sách sản phẩm */}
+          {/* Danh sách sản phẩm */}
           <div className={style.itemsSection}>
-            <h3>Ordered product</h3>
+            <h5>Ordered product</h5>
             <div className={style.itemList}>
               {items && items.length > 0 ? (
                 items.map((item, index) => (

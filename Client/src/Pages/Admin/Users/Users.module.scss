@@ -1,48 +1,79 @@
+@use '../../../Styles/variable' as *;
+
 .container {
-  padding: 20px;
-  .title { margin-bottom: 20px; color: #333; }
-}
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  .tableWrapper {
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      background: $White-color;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-  th, td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #f0f0f0;
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+        align-content: center;
+        border-bottom: 1px solid $Grey-50;
+
+        .avatar {
+
+          width: 45px;
+          height: 45px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 1px solid $Grey-400;
+        }
+
+        .nameGroup p {
+          margin: 0;
+          color: $Grey-800;
+          font-size: $font-size-tiny;
+        }
+
+        .address {
+          display: block;
+          max-width: 200px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-size: $font-size-tiny;
+        }
+
+        .roleSelect {
+          padding: 5px 10px;
+          border-radius: 4px;
+          cursor: pointer;
+
+          &.admin {
+            color: $Danger-color;
+            font-weight: bold;
+            border-color: $Danger-color;
+          }
+
+          &.customer {
+            color: $Soft-Primary-color;
+            border-color: $Soft-Primary-color;
+          }
+        }
+
+      }
+
+
+      th {
+        background: $Grey-50;
+        font-weight: $font-weight-semibold;
+      }
+
+      tr:hover {
+        background: $Green-grey-50;
+      }
+    }
+
   }
-
-  th { background: #f8f9fa; font-weight: 600; }
-}
-
-.avatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid #ddd;
-}
-
-.nameGroup p { margin: 0; color: #555; font-size: 14px; }
-
-.address {
-  display: block;
-  max-width: 200px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 13px;
-}
-
-.roleSelect {
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  &.admin { color: #e74c3c; font-weight: bold; border-color: #e74c3c; }
-  &.customer { color: #2ecc71; border-color: #2ecc71; }
 }

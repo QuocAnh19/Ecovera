@@ -11,7 +11,7 @@ export default function Orders() {
     fetchOrders();
   }, []);
 
-  // 1. Lấy danh sách đơn hàng dùng fetch
+  // Lấy danh sách đơn hàng dùng fetch
   const fetchOrders = async () => {
     try {
       const response = await fetch(
@@ -29,7 +29,7 @@ export default function Orders() {
     }
   };
 
-  // 2. Cập nhật trạng thái dùng fetch
+  // Cập nhật trạng thái dùng fetch
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       const response = await fetch(
@@ -68,7 +68,7 @@ export default function Orders() {
 
   return (
     <div className={style.container}>
-      <h2 className={style.title}>Order Management</h2>
+      <h4>Order Management</h4>
 
       <div className={style.tableWrapper}>
         <table className={style.table}>
@@ -110,8 +110,8 @@ export default function Orders() {
                     >
                       <option value="processing">Processing</option>
                       <option value="shipping">Shipping</option>
-                      <option value="delivered">Delivered</option>
-                      <option value="cancelled">Cancelled</option>
+                      {/* <option value="delivered">Delivered</option> */}
+                      {/* <option value="cancelled">Cancelled</option> */}
                     </select>
                   </td>
                   <td>

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import style from "./ProductsList.module.scss";
 import CategoryNavigation from "../../../Layouts/Navigation/Category";
+import Tag from "../../Tag";
 
 export default function ProductsList() {
   const [products, setProducts] = useState([]);
@@ -28,7 +29,7 @@ export default function ProductsList() {
       .then((data) => setProducts(data.filter((p) => p.is_active !== 0))); // chỉ hiển thị sản phẩm active
   }, []);
 
-  // Lọc theo category
+  //  Filter products khi đổi category
   useEffect(() => {
     if (activeCategory === "all") {
       setFilteredProducts(products);
@@ -39,12 +40,12 @@ export default function ProductsList() {
     }
   }, [products, activeCategory]);
 
-  // Xử lý yêu cầu xóa (mở confirm popup)
+  // Process deletion requests (open confirm popup)
   const requestDelete = (productId) => {
     setConfirm({ visible: true, productId });
   };
 
-  // Xóa sản phẩm
+  // Delete product
   const handleDelete = async (productId) => {
     try {
       const res = await fetch(
@@ -57,15 +58,15 @@ export default function ProductsList() {
 
       if (res.ok) {
         setProducts((prev) => prev.filter((p) => p.product_id !== productId));
-        setToast("Đã xóa sản phẩm thành công");
+        setToast("Successfully deleted product");
         setTimeout(() => setToast(""), 3000);
       } else {
-        setToast("Lỗi: " + data.message);
+        setToast("Error: " + data.message);
         setTimeout(() => setToast(""), 3000);
       }
     } catch (err) {
       console.error(err);
-      setToast("Lỗi server!");
+      setToast("Error server!");
       setTimeout(() => setToast(""), 3000);
     }
   };
@@ -91,28 +92,30 @@ export default function ProductsList() {
                 className={style.img}
               />
               <p>{p.name}</p>
-              <p>Giá: ${p.original_price}</p>
+              <p>Price: ${p.original_price}</p>
               {p.sale_price && <p>Sale: ${p.sale_price}</p>}
               {p.tags && p.tags.length > 0 && (
                 <div className={style.tags}>
-                  {p.tags.map((t, i) => (
-                    <span key={i}>{t}</span>
+                  {p.tags.map((tag, index) => (
+                    <Tag key={index} type={tag}>
+                      {tag}
+                    </Tag>
                   ))}
                 </div>
               )}
               <div className={style.actions}>
-                {/* <button className={style.editBtn}>Chỉnh sửa</button> */}
+                {/* <button className={style.editBtn}>Edit</button> */}
                 <button
                   className={style.deleteBtn}
                   onClick={() => requestDelete(p.product_id)}
                 >
-                  Xóa
+                  Delete
                 </button>
               </div>
             </div>
           ))
         ) : (
-          <p>Không có sản phẩm nào</p>
+          <p>No products</p>
         )}
       </div>
 
@@ -123,7 +126,7 @@ export default function ProductsList() {
       {confirm.visible && (
         <div className={style.confirmOverlay}>
           <div className={style.confirmBox}>
-            <p>Bạn có chắc muốn xóa sản phẩm này?</p>
+            <p>Are you sure you want to delete this product?</p>
             <div className={style.actions}>
               <button
                 className={style.confirmBtn}
@@ -132,13 +135,13 @@ export default function ProductsList() {
                   setConfirm({ visible: false, productId: null });
                 }}
               >
-                Xác nhận
+                Confirm
               </button>
               <button
                 className={style.cancelBtn}
                 onClick={() => setConfirm({ visible: false, productId: null })}
               >
-                Hủy
+                Cancel
               </button>
             </div>
           </div>

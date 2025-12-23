@@ -4,14 +4,11 @@ import db from "../../Config/dataBase.js";
 
 const router = express.Router();
 
-// 💡 HÀM TẠO ID CÓ TIỀN TỐ
 const generateId = (prefix, count) => {
   const padded = String(count).padStart(5, "0");
   return `${prefix}-${padded}`;
 };
 
-// 🧾 Tạo đơn hàng mới (KHÔNG DÙNG TOKEN)
-// 🧾 Tạo đơn hàng mới (KHÔNG DÙNG TOKEN)
 router.post("/create", async (req, res) => {
   console.log("🟦 Request Body:", req.body);
 
@@ -26,7 +23,7 @@ router.post("/create", async (req, res) => {
 
   try {
     connection = await db.getConnection();
-    await connection.beginTransaction(); // 1️⃣ Tạo ORDER_ID (loop tối đa 5 lần tránh trùng)
+    await connection.beginTransaction();
 
     let orderId;
     let attempts = 0;
@@ -57,7 +54,7 @@ router.post("/create", async (req, res) => {
         success: false,
         mess: "Không tạo được Order ID. Vui lòng thử lại!",
       });
-    } // 2️⃣ Insert order
+    } // Insert order
 
     await connection.query(
       `INSERT INTO orders (order_id, user_id, order_uuid, total_amount, shipping_address, payment_method, status, created_at) VALUES (?, ?, ?, ?, ?, ?, 'Processing', NOW())`,
@@ -69,7 +66,7 @@ router.post("/create", async (req, res) => {
         shipping_address,
         payment_method.toUpperCase(),
       ]
-    ); // 3️⃣ Insert order items và chuẩn bị cập nhật tồn kho
+    ); // Insert order items và chuẩn bị cập nhật tồn kho
 
     const detailIdBase = countBase * 1000;
     let detailCount = 0;
@@ -81,14 +78,14 @@ router.post("/create", async (req, res) => {
       const detailId = generateId("DETAIL", detailIdBase + detailCount);
 
       const productId = item.id || item.product_id; // Ưu tiên lấy price từ FE
-      let price = item.price; // Nếu FE không có price, fallback sang salePrice/originalPrice
+      let price = item.price;
 
       if (!price) {
         price = item.sale_price ?? item.original_price ?? 0;
       }
 
       if (!price || price <= 0) {
-        console.warn("⚠️ PRICE WARNING:", item);
+        console.warn("PRICE WARNING:", item);
       }
 
       await connection.query(
@@ -96,11 +93,11 @@ router.post("/create", async (req, res) => {
         [detailId, orderId, productId, item.quantity, price]
       );
 
-      // 📝 Thêm thông tin sản phẩm vào mảng để cập nhật tồn kho sau
+      // Thêm thông tin sản phẩm vào mảng để cập nhật tồn kho sau
       productUpdates.push({ productId, quantity: item.quantity });
     }
 
-    // 4️⃣ Cập nhật số lượng sản phẩm (trừ đi số lượng đã đặt)
+    // Cập nhật số lượng sản phẩm
     for (const update of productUpdates) {
       await connection.query(
         `UPDATE products 
@@ -108,7 +105,7 @@ router.post("/create", async (req, res) => {
          WHERE product_id = ? AND quantity >= ?`,
         [update.quantity, update.productId, update.quantity]
       );
-      // Lưu ý: Thêm điều kiện quantity >= ? để tránh tồn kho âm nếu có nhiều giao dịch đồng thời
+      // Lưu ý: điều kiện quantity >= ? để tránh tồn kho âm nếu có nhiều giao dịch đồng thời
     }
 
     await connection.commit();
@@ -120,18 +117,18 @@ router.post("/create", async (req, res) => {
     });
   } catch (err) {
     if (connection) await connection.rollback();
-    console.error("❌ DB Error:", err);
+    console.error("DB Error:", err);
 
     res.status(500).json({
       success: false,
-      mess: "Lỗi tạo đơn hàng! Vui lòng kiểm tra dữ liệu.",
+      mess: "Order creation error! Please check the data.",
     });
   } finally {
     if (connection) connection.release();
   }
 });
 
-// 💳 Thanh toán ảo
+// Thanh toán ảo
 router.post("/pay/:uuid", async (req, res) => {
   const { uuid } = req.params;
 
@@ -144,13 +141,13 @@ router.post("/pay/:uuid", async (req, res) => {
     if (result.affectedRows === 0) {
       return res.status(404).json({
         success: false,
-        mess: "Không tìm thấy đơn hàng hoặc đã thanh toán rồi.",
+        mess: "Order not found or already paid for.",
       });
     }
 
     res.json({
       success: true,
-      mess: "Thanh toán ảo thành công!",
+      mess: "Virtual payment successful!",
     });
   } catch (err) {
     console.error(err);
@@ -185,7 +182,7 @@ router.get("/detail/:uuid", async (req, res) => {
   try {
     const { uuid } = req.params;
 
-    // ---- Lấy ORDER bằng UUID (đúng logic mua hàng của bạn) ----
+    // ---- Lấy ORDER bằng UUID ----
     const [orderRows] = await db.query(
       "SELECT * FROM orders WHERE order_uuid = ?",
       [uuid]
