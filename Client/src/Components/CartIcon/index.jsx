@@ -1,32 +1,25 @@
 import React from "react";
 
 import style from "./CartIcon.module.scss";
-
 import { IconCart } from "../../Assets";
-import { useCart } from "../../ConText/CartContext";
+import { useCartStore } from "../../store/useCartStore";
 
 export default function CartIcon({ handleGoToCart }) {
-  const { cartItems } = useCart();
-
-  const uniqueProductCount = cartItems.length;
-
-  const totalPrice = cartItems.reduce((sum, item) => {
-    const price = item.sale_price ? item.sale_price : item.original_price;
-    return (sum += price * item.quantity);
-  }, 0);
+  const totalItems = useCartStore((state) => state.totalItems);
+  const totalAmount = useCartStore((state) => state.totalAmount);
 
   return (
     <div className={style.cartIconWrapper} onClick={handleGoToCart}>
       <div className={style.iconBox}>
         <IconCart className={style.iconCart} />
-        {uniqueProductCount > 0 && (
-          <span className={style.badge}>{uniqueProductCount}</span>
+        {totalItems > 0 && (
+          <span className={style.badge}>{totalItems}</span>
         )}
       </div>
 
       <div className={style.cartInfo}>
         <div className={style.label}>Shopping cart:</div>
-        <div className={style.total}>${totalPrice.toFixed(2)}</div>
+        <div className={style.total}>${Number(totalAmount).toFixed(2)}</div>
       </div>
     </div>
   );

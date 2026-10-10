@@ -1,14 +1,18 @@
+import { useEffect } from "react";
 import AppRoutes from "./Routes";
 
 import "./App.scss";
-import { CartProvider } from "./ConText/CartContext";
+import { useCartStore } from "./store/useCartStore";
 
 export default function App() {
+  useEffect(() => {
+    // Tự động đồng bộ giỏ hàng khi khởi động ứng dụng
+    useCartStore.getState().fetchCart();
+  }, []);
+
   return (
-    <CartProvider>
-      <div className="app">
-        <AppRoutes />
-      </div>
-    </CartProvider>
+    <div className="app">
+      <AppRoutes />
+    </div>
   );
 }

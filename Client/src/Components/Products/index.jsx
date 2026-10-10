@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import style from "./Products.module.scss";
 
@@ -9,27 +9,14 @@ import Tag from "../Tag";
 import QuickView from "./QuickView";
 
 import { IconArrow, IconCart } from "../../Assets";
+import { useCartStore } from "../../store/useCartStore";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null); // item click
-  const [cartItems, setCartItems] = useState([]); // giỏ hàng
+  const addToCart = useCartStore((state) => state.addToCart);
 
   const navigate = useNavigate();
-
-  const handleAddToCart = (item) => {
-    const exist = cartItems.find((ci) => ci.id === item.id);
-    if (exist) {
-      setCartItems(
-        cartItems.map((ci) =>
-          ci.id === item.id ? { ...ci, quantity: ci.quantity + 1 } : ci
-        )
-      );
-    } else {
-      setCartItems([...cartItems, { ...item, quantity: 1 }]);
-    }
-    setSelectedItem(null);
-  };
 
   useEffect(() => {
     fetch("http://localhost:5000/app/products")
@@ -115,6 +102,10 @@ export default function Products() {
                     size="circle"
                     icon={<IconCart />}
                     className={style.btnRight}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addToCart(item);
+                    }}
                   ></Button>
                 </div>
               </div>
@@ -125,13 +116,8 @@ export default function Products() {
 
       {selectedItem && (
         <QuickView
-          id={selectedItem.product_id}
-          image={selectedItem.image}
-          name={selectedItem.name}
-          salePrice={selectedItem.sale_price}
-          originalPrice={selectedItem.original_price}
+          product={selectedItem}
           onClose={() => setSelectedItem(null)}
-          onAddToCart={() => handleAddToCart(selectedItem)}
         />
       )}
     </div>

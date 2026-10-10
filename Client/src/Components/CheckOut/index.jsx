@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import style from "./CheckOut.module.scss";
-import { useCart } from "../../ConText/CartContext";
+import { useCartStore } from "../../store/useCartStore";
 import Button from "../Button";
 
 export default function CheckOut() {
-  const { cartItems, clearCart } = useCart();
+  const { cartItems, clearCart, totalAmount } = useCartStore();
   const [loading, setLoading] = useState(false);
 
   const [user, setUser] = useState(null);
@@ -82,10 +82,14 @@ export default function CheckOut() {
     setTempForm({});
   };
 
-  const total = cartItems.reduce((acc, item) => {
-    const price = item.sale_price ? item.sale_price : item.original_price;
-    return acc + price * item.quantity;
-  }, 0);
+  const total =
+    totalAmount ??
+    cartItems.reduce((acc, item) => {
+      const price = Number(
+        item.price ?? item.sale_price ?? item.original_price ?? 0
+      );
+      return acc + price * item.quantity;
+    }, 0);
 
   // Load user từ localStorage
   useEffect(() => {
@@ -400,12 +404,19 @@ export default function CheckOut() {
         <h2>Order Summary</h2>
 
         {cartItems.map((item) => {
-          const price = item.sale_price ? item.sale_price : item.original_price;
+          const price = Number(
+            item.price ?? item.sale_price ?? item.original_price ?? 0
+          );
+          const imageSrc = item.image
+            ? item.image.startsWith("http")
+              ? item.image
+              : `http://localhost:5000/uploads/${item.image}`
+            : "/placeholder.png";
 
           return (
-            <div key={item.id} className={style.item}>
+            <div key={item.cartItemId || item.id} className={style.item}>
               <img
-                src={`http://localhost:5000/uploads/${item.image}`}
+                src={imageSrc}
                 alt={item.name}
                 className={style.itemImage}
               />

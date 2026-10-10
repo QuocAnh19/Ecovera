@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useCart } from "../../../ConText/CartContext";
+import { useCartStore } from "../../../store/useCartStore";
 
 import style from "./QuickView.module.scss";
 
@@ -14,18 +14,21 @@ import {
 import QualitySelector from "../../QualitySelector";
 
 export default function QuickView({ product, onClose }) {
-  const { addToCart } = useCart();
+  const addToCart = useCartStore((state) => state.addToCart);
   const [quantity, setQuantity] = useState(1);
 
   if (!product) return null;
 
   const handleAdd = () => {
-    addToCart({
-      ...product,
-      product_id: product.product_id,
-      price: product.sale_price || product.original_price,
-      quantity,
-    });
+    addToCart(
+      {
+        ...product,
+        id: product.id || product.product_id,
+        productId: product.product_id || product.id,
+        price: product.sale_price || product.original_price,
+      },
+      quantity
+    );
 
     onClose();
   };

@@ -5,17 +5,11 @@ import style from "./ShoppingCart.module.scss";
 
 import Button from "../Button";
 import QualitySelector from "../QualitySelector";
-import { useCart } from "../../ConText/CartContext";
+import { useCartStore } from "../../store/useCartStore";
 import { IconClose } from "../../Assets/Icon";
 
 export default function ShoppingCart() {
-  const { cartItems, removeFromCart, updateQuantity } = useCart();
-
-  const subtotal = cartItems.reduce((sum, item) => {
-    const price = Number(item.sale_price ?? item.original_price);
-    return sum + price * item.quantity;
-  }, 0);
-
+  const { cartItems, removeItem, updateQuantity, totalAmount } = useCartStore();
   const navigate = useNavigate();
 
   return (
@@ -31,58 +25,66 @@ export default function ShoppingCart() {
             <span>Subtotal</span>
           </div>
 
-          {cartItems.map((item) => {
-            const price = item.sale_price
-              ? item.sale_price
-              : item.original_price;
+          {cartItems.length === 0 ? (
+            <div style={{ padding: "40px 0", textAlign: "center", color: "#666" }}>
+              Giỏ hàng của bạn đang trống.
+            </div>
+          ) : (
+            cartItems.map((item) => {
+              const price = Number(
+                item.price ?? item.sale_price ?? item.original_price ?? 0
+              );
+              const itemId = item.cartItemId || item.id || item.productId;
+              const imageSrc = item.image
+                ? item.image.startsWith("http")
+                  ? item.image
+                  : `http://localhost:5000/uploads/${item.image}`
+                : "/placeholder.png";
 
-            return (
-              <div key={item.id} className={style.cartRow}>
-                <div className={style.product}>
-                  <img
-                    src={`http://localhost:5000/uploads/${item.image}`}
-                    alt={item.name}
-                  />
-                  <span>{item.name}</span>
+              return (
+                <div key={itemId} className={style.cartRow}>
+                  <div className={style.product}>
+                    <img src={imageSrc} alt={item.name} />
+                    <span>{item.name}</span>
+                  </div>
+
+                  <div className={style.price}>${price.toFixed(2)}</div>
+
+                  <div className={style.quantity}>
+                    <QualitySelector
+                      value={item.quantity}
+                      onChange={(newQty) => updateQuantity(itemId, newQty)}
+                    />
+                  </div>
+
+                  <div className={style.subtotal}>
+                    ${(price * item.quantity).toFixed(2)}
+                  </div>
+
+                  <Button
+                    size="circleCloseBorder"
+                    closeBorder
+                    className={style.removeBtn}
+                    onClick={() => removeItem(itemId)}
+                  >
+                    <IconClose />
+                  </Button>
                 </div>
-
-                <div className={style.price}>${price}</div>
-
-                <div className={style.quantity}>
-                  <QualitySelector
-                    value={item.quantity}
-                    onChange={(newQty) => updateQuantity(item.id, newQty)}
-                  />
-                </div>
-
-                <div className={style.subtotal}>
-                  ${(price * item.quantity).toFixed(2)}
-                </div>
-
-                <Button
-                  size="circleCloseBorder"
-                  closeBorder
-                  className={style.removeBtn}
-                  onClick={() => removeFromCart(item.id)}
-                >
-                  <IconClose />
-                </Button>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
 
         <div className={style.cartFooter}>
           <div className={style.total}>
             <span>Total:</span>
-            <span>${subtotal.toFixed(2)}</span>
+            <span>${Number(totalAmount).toFixed(2)}</span>
           </div>
           <Button
             fill
             className={`${style.btnSubmit}`}
-            // onClick={() => navigate("checkout")}
             href={"/shoppingCart/checkout"}
-            disabled={cartItems.length == 0 ? true : false}
+            disabled={cartItems.length === 0}
           >
             Proceed to checkout
           </Button>
