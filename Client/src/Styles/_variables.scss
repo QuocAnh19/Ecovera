@@ -1,0 +1,232 @@
+@use "sass:map";
+
+// =============================================================================
+// ECOVERA DESIGN SYSTEM & SCSS VARIABLES
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// 1. MÀU SẮC CHỦ ĐẠO (COLOR PALETTE)
+// -----------------------------------------------------------------------------
+
+// Màu thương hiệu (Brand / Primary colors)
+$color-primary: #00b207;
+$color-primary-soft: #84d187;
+$color-primary-hard: #2c742f;
+$color-primary-light: #e8f7e8;
+$color-primary-dark: #008a05;
+
+// Màu phụ / Điểm nhấn (Secondary & Accent)
+$color-secondary: #2c742f;
+$color-accent: #ff8a00;
+
+// Màu trạng thái (Feedback / Status colors)
+$color-success: #00b207;
+$color-warning: #ff8a00;
+$color-danger: #ea4b48;
+$color-info: #2b78c5;
+
+// Màu cơ bản (Base neutrals)
+$color-white: #ffffff;
+$color-black: #000000;
+
+// Thang màu xám trung tính (Neutral Gray scale)
+$color-gray-50: #f2f2f2;
+$color-gray-100: #e6e6e6;
+$color-gray-200: #cccccc;
+$color-gray-300: #b3b3b3;
+$color-gray-400: #999999;
+$color-gray-500: #808080;
+$color-gray-600: #666666;
+$color-gray-700: #4d4d4d;
+$color-gray-800: #333333;
+$color-gray-900: #1a1a1a;
+
+// Thang màu xám xanh sinh thái (Green-Gray scale)
+$color-green-gray-50: #edf2ee;
+$color-green-gray-100: #dde6dd;
+$color-green-gray-200: #bccdbb;
+$color-green-gray-300: #9cb99c;
+$color-green-gray-400: #7ba67b;
+$color-green-gray-500: #5a835a;
+$color-green-gray-600: #3a613a;
+$color-green-gray-700: #1a401a;
+$color-green-gray-800: #003300;
+$color-green-gray-900: #001a00;
+
+// Màu chữ (Typography colors)
+$color-text-heading: #0a1931;
+$color-text-body: #4d4d4d;
+$color-text-muted: #808080;
+$color-text-light: #999999;
+$color-text-white: #ffffff;
+
+// Nền và viền (Background & Borders)
+$color-bg-body: #ffffff;
+$color-bg-surface: #f9fbf9;
+$color-bg-subtle: #edf2ee;
+$color-border-light: #e6e6e6;
+$color-border-medium: #cccccc;
+
+// -----------------------------------------------------------------------------
+// 2. PHÔNG CHỮ & KIỂU CHỮ (TYPOGRAPHY)
+// -----------------------------------------------------------------------------
+
+// Font families
+$font-family-primary: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+$font-family-heading: $font-family-primary;
+$font-main: $font-family-primary;
+
+// Font weights
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Font sizes
+$font-size-tiny: 14px;
+$font-size-small: 16px;
+$font-size-medium: 18px;
+$font-size-large: 20px;
+$font-size-xl: 24px;
+$font-size-xxl: 32px;
+$font-size-3xl: 40px;
+$font-size-4xl: 48px;
+$font-size-5xl: 56px;
+
+// Line heights
+$line-height-none: 1;
+$line-height-tight: 1.2;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.75;
+
+// -----------------------------------------------------------------------------
+// 3. ĐIỂM NGẮT GIAO DIỆN & RESPONSIVE (BREAKPOINTS)
+// -----------------------------------------------------------------------------
+
+$breakpoint-xs: 480px;   // Mobile nhỏ
+$breakpoint-sm: 640px;   // Mobile lớn
+$breakpoint-md: 768px;   // Tablet
+$breakpoint-lg: 1024px;  // Laptop / Small desktop
+$breakpoint-xl: 1280px;  // Desktop tiêu chuẩn
+$breakpoint-2xl: 1536px; // Màn hình lớn
+
+$breakpoints: (
+  "xs": $breakpoint-xs,
+  "sm": $breakpoint-sm,
+  "md": $breakpoint-md,
+  "lg": $breakpoint-lg,
+  "xl": $breakpoint-xl,
+  "2xl": $breakpoint-2xl,
+);
+
+// Mixins hỗ trợ viết SCSS Modules nhanh và chuẩn hóa
+@mixin respond-to($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media screen and (min-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Không tìm thấy breakpoint '#{$breakpoint}' trong bản đồ breakpoints.";
+  }
+}
+
+@mixin respond-down($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media screen and (max-width: (map.get($breakpoints, $breakpoint) - 1px)) {
+      @content;
+    }
+  } @else {
+    @warn "Không tìm thấy breakpoint '#{$breakpoint}' trong bản đồ breakpoints.";
+  }
+}
+
+@mixin mobile {
+  @media screen and (max-width: ($breakpoint-md - 1px)) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (min-width: $breakpoint-md) and (max-width: ($breakpoint-lg - 1px)) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 4. KHOẢNG CÁCH, BO GÓC & ĐỔ BÓNG (SPACING, RADIUS, SHADOWS)
+// -----------------------------------------------------------------------------
+
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+
+$radius-xs: 2px;
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 16px;
+$radius-full: 9999px;
+
+// Button components
+$btn-radius: 43px;
+$btn-font-weight: 600;
+$btn-padding-small: 10px 24px;
+$btn-padding-medium: 14px 32px;
+$btn-padding-large: 16px 40px;
+$btn-border: 1px solid $color-primary;
+
+// Tag
+$tag-radius: 4px;
+$tag-padding: 3px 8px;
+
+// Shadows & Transitions
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.12);
+
+$transition-fast: 150ms ease-in-out;
+$transition-normal: 250ms ease-in-out;
+$transition-slow: 350ms ease-in-out;
+
+// ------------------------------------------------ bí danh tương thích cũ
+// 5. BIẾN TƯƠNG THÍCH VỚI CODEBASE HIỆN TẠI (BACKWARD COMPATIBILITY)
+// -----------------------------------------------------------------------------
+$Soft-Primary-color: $color-primary-soft;
+$Primary-color: $color-primary;
+$Hard-Primary-color: $color-primary-hard;
+$Warning-color: $color-warning;
+$Danger-color: $color-danger;
+$White-color: $color-white;
+
+$Grey-50: $color-gray-50;
+$Grey-100: $color-gray-100;
+$Grey-200: $color-gray-200;
+$Grey-300: $color-gray-300;
+$Grey-400: $color-gray-400;
+$Grey-500: $color-gray-500;
+$Grey-600: $color-gray-600;
+$Grey-700: $color-gray-700;
+$Grey-800: $color-gray-800;
+$Grey-900: $color-gray-900;
+
+$Green-grey-50: $color-green-gray-50;
+$Green-grey-100: $color-green-gray-100;
+$Green-grey-200: $color-green-gray-200;
+$Green-grey-300: $color-green-gray-300;
+$Green-grey-400: $color-green-gray-400;
+$Green-grey-500: $color-green-gray-500;
+$Green-grey-600: $color-green-gray-600;
+$Green-grey-700: $color-green-gray-700;
+$Green-grey-800: $color-green-gray-800;
+$Green-grey-900: $color-green-gray-900;
+
+$text-heading-color: $color-text-heading;

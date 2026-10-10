@@ -2,6 +2,35 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 
+// Khởi tạo ứng dụng Express
+const app = express();
+
+// Cấu hình middleware CORS
+const corsOptions = {
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+app.use(cors(corsOptions));
+
+// Cấu hình middleware parse dữ liệu JSON và urlencoded
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Phục vụ các tệp tĩnh (uploads)
+app.use("/uploads", express.static(path.join(process.cwd(), "src/uploads")));
+
+// Endpoint kiểm tra sức khỏe hệ thống (Health Check)
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Server is running smoothly",
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Import và gắn các routes hiện có vào ứng dụng
 import routes from "./Routes/index.js";
 import loginRoutes from "./Routes/Auth/Login.js";
 import OrderRoutes from "./Routes/Payment/OrderRoutes.js";
@@ -9,23 +38,11 @@ import RegisterRoutes from "./Routes/Auth/Register.js";
 import userRoutes from "./Routes/User/UsersRoutes.js";
 import AdminRoutes from "./Routes/Admin/AdminRoutes.js";
 
-import dotenv from "dotenv";
-dotenv.config();
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-app.use("/uploads", express.static(path.join(process.cwd(), "src/uploads")));
 app.use("/app", routes);
-
 app.use("/api", RegisterRoutes);
 app.use("/api", loginRoutes);
-
 app.use("/api/orders", OrderRoutes);
-
 app.use("/api/users", userRoutes);
-
 app.use("/api/admin", AdminRoutes);
 
 export default app;
