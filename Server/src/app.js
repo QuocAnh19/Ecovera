@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 
+import AppError from "./utils/AppError.js";
+import errorHandler from "./middlewares/error.middleware.js";
+
 // Khởi tạo ứng dụng Express
 const app = express();
 
@@ -44,5 +47,15 @@ app.use("/api", loginRoutes);
 app.use("/api/orders", OrderRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", AdminRoutes);
+
+// Xử lý route không tồn tại (404 Not Found)
+app.all("*", (req, res, next) => {
+  next(
+    new AppError(`Không tìm thấy đường dẫn ${req.originalUrl} trên máy chủ`, 404)
+  );
+});
+
+// Middleware bắt lỗi toàn cục (bắt buộc đặt ở cuối cùng)
+app.use(errorHandler);
 
 export default app;
