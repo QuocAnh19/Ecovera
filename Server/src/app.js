@@ -41,6 +41,7 @@ import RegisterRoutes from "./Routes/Auth/Register.js";
 import userRoutes from "./Routes/User/UsersRoutes.js";
 import AdminRoutes from "./Routes/Admin/AdminRoutes.js";
 import cartRoutes from "./routes/cart.routes.js";
+import orderRoutes from "./routes/order.routes.js";
 
 app.use("/app", routes);
 app.use("/api", RegisterRoutes);
@@ -49,8 +50,9 @@ app.use("/api/orders", OrderRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", AdminRoutes);
 
-// Gắn route Giỏ hàng tại tiền tố chuẩn hóa /api/v1/cart
+// Gắn route Giỏ hàng và Đơn hàng tại tiền tố chuẩn hóa /api/v1
 app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/orders", orderRoutes);
 
 // Xử lý route không tồn tại (404 Not Found)
 app.use((req, res, next) => {
