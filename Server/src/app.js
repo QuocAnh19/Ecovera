@@ -40,6 +40,7 @@ import OrderRoutes from "./Routes/Payment/OrderRoutes.js";
 import RegisterRoutes from "./Routes/Auth/Register.js";
 import userRoutes from "./Routes/User/UsersRoutes.js";
 import AdminRoutes from "./Routes/Admin/AdminRoutes.js";
+import cartRoutes from "./routes/cart.routes.js";
 
 app.use("/app", routes);
 app.use("/api", RegisterRoutes);
@@ -48,8 +49,11 @@ app.use("/api/orders", OrderRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", AdminRoutes);
 
+// Gắn route Giỏ hàng tại tiền tố chuẩn hóa /api/v1/cart
+app.use("/api/v1/cart", cartRoutes);
+
 // Xử lý route không tồn tại (404 Not Found)
-app.all("*", (req, res, next) => {
+app.use((req, res, next) => {
   next(
     new AppError(`Không tìm thấy đường dẫn ${req.originalUrl} trên máy chủ`, 404)
   );
