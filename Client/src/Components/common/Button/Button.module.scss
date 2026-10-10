@@ -1,0 +1,85 @@
+@use "../../../styles/mixins" as *;
+
+.button {
+  @include flex-center;
+  gap: 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.primary {
+  background-color: #00b207; // Màu xanh eco thương hiệu Ecovera
+  color: #ffffff;
+  border-color: #00b207;
+
+  &:hover:not(:disabled) {
+    background-color: #009606;
+    border-color: #009606;
+  }
+}
+
+.secondary {
+  background-color: #2c742f;
+  color: #ffffff;
+  border-color: #2c742f;
+
+  &:hover:not(:disabled) {
+    background-color: #215723;
+    border-color: #215723;
+  }
+}
+
+.outline {
+  background-color: transparent;
+  border-color: #00b207;
+  color: #00b207;
+
+  &:hover:not(:disabled) {
+    background-color: #e8f7e8;
+  }
+}
+
+.sm {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.md {
+  padding: 10px 18px;
+  font-size: 0.95rem;
+}
+
+.lg {
+  padding: 14px 24px;
+  font-size: 1.05rem;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+.outline .spinner {
+  border-color: rgba(0, 178, 7, 0.2);
+  border-top-color: #00b207;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

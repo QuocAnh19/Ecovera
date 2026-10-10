@@ -1,0 +1,65 @@
+# ==============================================================================
+# ECOVERA PROJECT - ROOT .GITIGNORE (Client + Server)
+# ==============================================================================
+
+# 1. Dependencies (Áp dụng cho mọi cấp thư mục: Root, Client, Server)
+node_modules/
+*/node_modules/
+**/node_modules/
+.pnp/
+.pnp.js
+
+# 2. Môi trường & Bảo mật (Chặn commit file chứa bí mật, giữ lại .env.example)
+.env
+.env.*
+*.env
+**/.env
+**/.env.*
+!**/.env.example
+!.env.example
+
+# 3. Thư mục bản dựng (Build outputs cho Client Vite/React & Server)
+dist/
+build/
+Client/dist/
+Client/build/
+Server/dist/
+Server/build/
+out/
+
+# 4. Logs hệ thống
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 5. File rác hệ điều hành & cấu hình IDE
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 6. File nén tạm thời & backup
+*.zip
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+*.bak
+*.tmp
+*.temp

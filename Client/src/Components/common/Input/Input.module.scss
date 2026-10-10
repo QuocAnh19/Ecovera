@@ -1,0 +1,78 @@
+@use "../../../styles/mixins" as *;
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333333;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.iconWrapper {
+  position: absolute;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888888;
+  pointer-events: none;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #1f2937;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+
+  &:focus {
+    border-color: #00b207;
+    box-shadow: 0 0 0 3px rgba(0, 178, 7, 0.15);
+  }
+
+  &:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+}
+
+.withIcon {
+  padding-left: 42px;
+}
+
+.hasError {
+  border-color: #ea4b48;
+
+  &:focus {
+    border-color: #ea4b48;
+    box-shadow: 0 0 0 3px rgba(234, 75, 72, 0.15);
+  }
+}
+
+.errorText {
+  font-size: 0.82rem;
+  color: #ea4b48;
+  margin-top: 2px;
+}

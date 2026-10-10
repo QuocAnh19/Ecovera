@@ -1,9 +1,17 @@
 {
-  "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "dotenv": "^17.2.3"
+  "name": "ecovera-project-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ecovera Workspace Orchestrator",
+  "scripts": {
+    "install:server": "npm install --prefix Ecovera/Server",
+    "install:client": "npm install --prefix Ecovera/Client",
+    "install:all": "npm install --prefix Ecovera/Server && npm install --prefix Ecovera/Client",
+    "server": "npm start --prefix Ecovera/Server",
+    "client": "npm start --prefix Ecovera/Client",
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"blue.bold,green.bold\" \"npm run server\" \"npm run client\""
   },
   "devDependencies": {
-    "@types/uuid": "^10.0.0"
+    "concurrently": "^10.0.6"
   }
 }
