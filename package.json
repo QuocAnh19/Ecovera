@@ -4,11 +4,11 @@
   "private": true,
   "description": "Ecovera Workspace Orchestrator",
   "scripts": {
-    "install:server": "npm install --prefix Ecovera/Server",
-    "install:client": "npm install --prefix Ecovera/Client",
-    "install:all": "npm install --prefix Ecovera/Server && npm install --prefix Ecovera/Client",
-    "server": "npm start --prefix Ecovera/Server",
-    "client": "npm start --prefix Ecovera/Client",
+    "install:server": "npm install --prefix Server",
+    "install:client": "npm install --prefix Client",
+    "install:all": "npm install --prefix Server && npm install --prefix Client",
+    "server": "npm start --prefix Server",
+    "client": "npm start --prefix Client",
     "dev": "concurrently -n \"SERVER,CLIENT\" -c \"blue.bold,green.bold\" \"npm run server\" \"npm run client\""
   },
   "devDependencies": {

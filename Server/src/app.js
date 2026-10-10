@@ -33,20 +33,20 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Import và gắn các routes hiện có vào ứng dụng
+// Import các router chức năng
 import routes from "./Routes/index.js";
 import loginRoutes from "./Routes/Auth/Login.js";
-import OrderRoutes from "./Routes/Payment/OrderRoutes.js";
 import RegisterRoutes from "./Routes/Auth/Register.js";
 import userRoutes from "./Routes/User/UsersRoutes.js";
 import AdminRoutes from "./Routes/Admin/AdminRoutes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 
+// Gắn các routes vào ứng dụng
 app.use("/app", routes);
 app.use("/api", RegisterRoutes);
 app.use("/api", loginRoutes);
-app.use("/api/orders", OrderRoutes);
+app.use("/api/orders", orderRoutes); // Đã chuyển sang orderRoutes mới chuẩn 3 lớp
 app.use("/api/users", userRoutes);
 app.use("/api/admin", AdminRoutes);
 
