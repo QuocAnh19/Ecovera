@@ -1,25 +1,24 @@
 import axios from "axios";
 import { getAccessToken, clearTokens } from "../utils/token.js";
 
-const getBaseUrl = () => {
-  if (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
-  }
-  if (typeof process !== "undefined" && process.env?.REACT_APP_API_BASE_URL) {
-    return process.env.REACT_APP_API_BASE_URL;
-  }
-  return "http://localhost:5000/api/v1";
-};
-
+/**
+ * Khởi tạo axios instance với baseURL từ biến môi trường hoặc fallback về localhost
+ */
 const apiClient = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL:
+    (typeof process !== "undefined" && process.env?.REACT_APP_API_URL) ||
+    (typeof process !== "undefined" && process.env?.REACT_APP_API_BASE_URL) ||
+    (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_URL) ||
+    "http://localhost:5000/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Request Interceptor: Tự động đính kèm Token
+/**
+ * Request Interceptor: Tự động lấy accessToken từ token.js và đính kèm vào header
+ */
 apiClient.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
@@ -31,21 +30,27 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor: Xử lý dữ liệu và bắt lỗi tập trung
+/**
+ * Response Interceptor: Trả về trực tiếp data và xử lý mã lỗi 401 Unauthorized
+ */
 apiClient.interceptors.response.use(
   (response) => {
-    // Trả về trực tiếp data từ ApiResponse chuẩn ở Server
+    // Trả về trực tiếp payload data từ máy chủ
     return response.data;
   },
   (error) => {
     const status = error.response?.status;
     const message =
-      error.response?.data?.message || "Có lỗi kết nối đến máy chủ";
+      error.response?.data?.message ||
+      error.response?.data?.mess ||
+      error.message ||
+      "Có lỗi kết nối đến máy chủ";
 
+    // Bắt lỗi 401 Unauthorized: token hết hạn hoặc không hợp lệ
     if (status === 401) {
-      // Token hết hạn hoặc không hợp lệ
       clearTokens();
-      // Chuyển hướng về trang đăng nhập nếu không đang ở trang đăng nhập
+
+      // Điều hướng về trang đăng nhập nếu người dùng đang ở trang cần bảo vệ
       if (
         typeof window !== "undefined" &&
         !window.location.pathname.includes("/signin") &&

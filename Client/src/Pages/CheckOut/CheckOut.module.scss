@@ -1,0 +1,266 @@
+@use "../../Styles/variable" as *;
+@use "../../Styles/typography" as *;
+
+.checkoutContainer {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    flex-wrap: wrap;
+
+    .left {
+        display: flex;
+        flex-direction: column;
+
+        .btnReturn {
+            width: fit-content;
+        }
+
+        .billingForm {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            width: 872px;
+            height: 710px;
+            gap: 1rem;
+
+            .addressContainer {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+
+                .savedAddressBox {
+                    display: flex;
+                    flex-direction: column;
+
+                    justify-content: space-between;
+                    gap: 8px;
+                    padding: 20px;
+                    border: 1px solid $Grey-200;
+                    border-radius: 10px;
+                    background: $White-color;
+
+                    .addressHeader {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 10px;
+
+                        .defaultTag {
+                            padding: 2px 8px;
+                            border: 1px solid $Primary-color;
+                            color: $Primary-color;
+                            font-size: 12px;
+                            border-radius: 4px;
+                        }
+                    }
+
+                    .rowAddress {
+                        display: flex;
+                        gap: 10px;
+                        flex-direction: column;
+                        color: $Grey-600;
+
+                        .addressDetail {
+                            margin: 10px 0;
+                        }
+
+                        .addressActions {
+                            display: flex;
+                        }
+                    }
+                }
+
+                .fadedAddress {
+                    opacity: 0.6;
+                    transition: opacity 0.3s ease;
+                    border: 1px solid $Grey-200;
+                    padding: 10px;
+                }
+            }
+
+            .editForm {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+
+                .row {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 1rem;
+
+                    .formGroup {
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+
+                        .address {
+                            display: flex;
+                            flex-direction: row;
+                            gap: 1rem;
+                        }
+
+                        .inputCheckout,
+                        select {
+                            flex: 1;
+                            padding: 14px;
+                            border: 1px solid $Grey-200;
+                            width: 100%;
+                            border-radius: 6px;
+                            font-size: $font-size-tiny;
+                            font-weight: $font-weight-regular;
+                            color: $Grey-400;
+                            margin-top: 8px;
+
+                            &:focus {
+                                outline: none;
+                                border-color: $Primary-color;
+                                box-shadow: 0 0 4px rgba(0, 178, 7, 0.3);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .additionalInfo {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 2rem;
+
+            textarea {
+                width: 100%;
+                min-height: 80px;
+                padding: 0.7rem;
+                border: 1px solid $Grey-200;
+                border-radius: 6px;
+                font-size: $font-size-tiny;
+                resize: vertical;
+                margin-top: 8px;
+
+                &:focus {
+                    outline: none;
+                    border-color: $Primary-color;
+                    box-shadow: 0 0 4px rgba(0, 178, 7, 0.3);
+                }
+            }
+        }
+    }
+
+    .orderSummary {
+        flex: 1;
+        border: 1px solid $Grey-200;
+        padding: 0 24px 24px 24px;
+        border-radius: 10px;
+        background-color: $White-color;
+
+        .rowSummary {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 12px 0 12px 0;
+
+            span {
+                font-weight: $font-weight-medium;
+            }
+
+            .totalValue {
+                font-weight: $font-weight-semibold;
+                font-size: $font-size-medium;
+            }
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid $White-color;
+
+            img.itemImage {
+                width: 55px;
+                height: 55px;
+                object-fit: cover;
+                border-radius: 8px;
+            }
+
+            .itemInfo {
+                flex: 1;
+                display: flex;
+                flex-direction: row;
+                gap: 6px;
+
+                .itemName {
+                    font-weight: $font-weight-semibold;
+                    font-size: $font-size-small;
+                    color: $Grey-900;
+                }
+
+                .itemQuantity {
+                    font-size: $font-size-tiny;
+                    color: $Grey-600;
+                }
+            }
+
+            .itemPrice {
+                font-weight: $font-weight-medium;
+                color: $Grey-900;
+                min-width: 60px;
+                text-align: right;
+            }
+        }
+
+        .paymentMethod {
+            margin-top: 20px;
+            margin-bottom: 24px;
+
+            .methodBox {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 32px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                cursor: pointer;
+            }
+
+            input[type="radio"] {
+                margin-right: 8px;
+            }
+        }
+
+        .submitBox {
+            display: flex;
+            justify-content: center;
+
+            .btnSubmit {
+                width: 376px;
+            }
+        }
+    }
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: $Primary-color;
+    color: $White-color;
+    padding: 12px 24px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    font-weight: $font-weight-medium;
+    animation: fadein 0.3s, fadeout 0.3s 2.7s;
+
+    &.toastError {
+        background-color: #e53935;
+    }
+}
